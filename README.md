@@ -4,6 +4,8 @@ Working on a datamodel that can represent all the info necessary. This is going 
 ```javascript
 {
     match: {
+        type: 'standard',
+        bestOf: 3,
         'red-score': 1,
         'blue-score': 0,
         phase: { // team-pick, blind-pick, map-pick, in-game

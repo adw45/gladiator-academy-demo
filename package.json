@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all --parallel serve build",
-    "serve": "node server/app.js",
+    "local": "npm-run-all --parallel serve build",
+    "start": "node server/app.js",
     "build": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
