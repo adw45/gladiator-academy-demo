@@ -29,18 +29,7 @@ const playerSelect = Vue.component('player-select', {
         </div>
     `,
     methods: {
-        increase: function() {
-            this.$socket.emit('increase')
-        },
-        decrease: function() {
-            this.$socket.emit('decrease')
-        },
-        joinRoom: function() {
-            this.$socket.emit('joinRoom', {
-                roomname: this.$route.params.id,
-                username: 'user-name'
-            })
-        }
+       
     },
     computed: {
         count() {
@@ -49,9 +38,6 @@ const playerSelect = Vue.component('player-select', {
         roomName: function() {
             return this.$route.params.id
         } 
-    },
-    mounted() {
-        this.joinRoom();
     }
 });
 

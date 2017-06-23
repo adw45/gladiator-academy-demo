@@ -54,7 +54,7 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _router = __webpack_require__(79);
+	var _router = __webpack_require__(81);
 
 	var _router2 = _interopRequireDefault(_router);
 
@@ -7316,19 +7316,35 @@
 
 /***/ }),
 /* 78 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
+
+	var _scoreboard = __webpack_require__(79);
+
+	var _scoreboard2 = _interopRequireDefault(_scoreboard);
+
+	var _mapSelect = __webpack_require__(80);
+
+	var _mapSelect2 = _interopRequireDefault(_mapSelect);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// https://www.youtube.com/watch?v=2CSr2vBApSI&index=1&list=PL55RiY5tL51pT0DNJraU93FhMzhXxtDAo
 	var store = new Vuex.Store({
 	    state: {
-	        count: 0
+	        type: null,
+	        bestOf: null
 	    },
 	    mutations: {
 	        update: function update(state, data) {
-	            state.count = data.number;
+	            state.type = data.type;
+	            state.bestOf = data.bestOf;
 	        }
+	    },
+	    modules: {
+	        scoreboard: _scoreboard2.default,
+	        mapSelect: _mapSelect2.default
 	    }
 	});
 
@@ -7336,31 +7352,71 @@
 
 /***/ }),
 /* 79 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	var scoreboard = {
+	    state: {
+	        redScore: null,
+	        blueScore: null
+	    },
+	    mutations: {
+	        update: function update(state, data) {
+	            state.redScore = data.redScore;
+	            state.blueScore = data.blueScore;
+	        }
+	    }
+	};
+
+	module.exports = scoreboard;
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	var mapSelect = {
+	    state: {
+	        maps: []
+	    },
+	    mutations: {
+	        update: function update(state, data) {
+	            state.maps = data.maps;
+	        }
+	    }
+	};
+
+	module.exports = mapSelect;
+
+/***/ }),
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _startRoom = __webpack_require__(80);
+	var _startRoom = __webpack_require__(82);
 
 	var _startRoom2 = _interopRequireDefault(_startRoom);
 
-	var _matchRoom = __webpack_require__(81);
+	var _matchRoom = __webpack_require__(83);
 
 	var _matchRoom2 = _interopRequireDefault(_matchRoom);
 
-	var _playerSelect = __webpack_require__(82);
+	var _playerSelect = __webpack_require__(84);
 
 	var _playerSelect2 = _interopRequireDefault(_playerSelect);
 
-	var _mapSelect = __webpack_require__(83);
+	var _mapSelect = __webpack_require__(85);
 
 	var _mapSelect2 = _interopRequireDefault(_mapSelect);
 
-	var _scoreboard = __webpack_require__(84);
+	var _scoreboard = __webpack_require__(86);
 
 	var _scoreboard2 = _interopRequireDefault(_scoreboard);
 
-	var _team = __webpack_require__(85);
+	var _team = __webpack_require__(87);
 
 	var _team2 = _interopRequireDefault(_team);
 
@@ -7373,7 +7429,7 @@
 	module.exports = router;
 
 /***/ }),
-/* 80 */
+/* 82 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7391,13 +7447,13 @@
 	module.exports = startRoom;
 
 /***/ }),
-/* 81 */
+/* 83 */
 /***/ (function(module, exports) {
 
 	'use strict';
 
 	var matchRoom = Vue.component('match-room', {
-	    template: '\n        <div>\n            <h1>Room: {{ roomName }}</h1>\n            <team></team>\n            <map-select></map-select>\n            <scoreboard></scoreboard>\n            <team></team>\n        </div>\n    ',
+	    template: '\n        <div>\n            <h1>Room: {{ roomName }}</h1>\n            <div id="game-type">Game Type: {{ type }}</div>\n            <div id="bestOf">Best of: {{ bestOf }}</div>\n            <team></team>\n            <map-select></map-select>\n            <scoreboard></scoreboard>\n            <team></team>\n        </div>\n    ',
 	    // <span id="number">{{ count }}</span>
 	    //         </br>
 	    //         </br>
@@ -7418,12 +7474,17 @@
 	        }
 	    },
 	    computed: {
-	        count: function count() {
-	            return this.$store.state.count;
-	        },
-
 	        roomName: function roomName() {
 	            return this.$route.params.id;
+	        },
+	        type: function type() {
+	            return this.$store.state.type;
+	        },
+	        bestOf: function bestOf() {
+	            return this.$store.state.bestOf;
+	        },
+	        count: function count() {
+	            return this.$store.state.count;
 	        }
 	    },
 	    mounted: function mounted() {
@@ -7440,27 +7501,14 @@
 	module.exports = matchRoom;
 
 /***/ }),
-/* 82 */
+/* 84 */
 /***/ (function(module, exports) {
 
 	'use strict';
 
 	var playerSelect = Vue.component('player-select', {
 	    template: '\n        <div>\n            <input type=\'text\' placeholder=\'Nickname\'></input>\n            <select>\n                <option selected=\'true\' disabled>Class</option>\n                <option>Death Knight</option>\n                <option>Demon Hunter</option>\n                <option>Hunter</option>\n                <option>Mage</option>\n                <option>Monk</option>\n                <option>Druid</option>\n                <option>Paladin</option>\n                <option>Priest</option>\n                <option>Rogue</option>\n                <option>Shaman</option>\n                <option>Warlock</option>\n                <option>Warrior</option>\n            </select>\n            <select>\n                <option selected=\'true\' disabled>Specialization</option>\n                <option>Discipline</option>\n                <option>Holy</option>\n                <option>Shadow</option>\n            </select>\n            <input type=\'text\' placeholder=\'Blizzard Id\'></input>\n            <input type=\'text\' placeholder=\'Character Name\'></input>\n            <button>Lock</button>\n        </div>\n    ',
-	    methods: {
-	        increase: function increase() {
-	            this.$socket.emit('increase');
-	        },
-	        decrease: function decrease() {
-	            this.$socket.emit('decrease');
-	        },
-	        joinRoom: function joinRoom() {
-	            this.$socket.emit('joinRoom', {
-	                roomname: this.$route.params.id,
-	                username: 'user-name'
-	            });
-	        }
-	    },
+	    methods: {},
 	    computed: {
 	        count: function count() {
 	            return this.$store.state.count;
@@ -7469,89 +7517,10 @@
 	        roomName: function roomName() {
 	            return this.$route.params.id;
 	        }
-	    },
-	    mounted: function mounted() {
-	        this.joinRoom();
 	    }
 	});
 
 	module.exports = playerSelect;
-
-/***/ }),
-/* 83 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var mapSelect = Vue.component('map-select', {
-	    template: '\n        <div>\n            <input type=\'radio\' name=\'map\'>Nagrand Arena</input>\n            <input type=\'radio\' name=\'map\'>Blade Edge Arena</input>\n            <input type=\'radio\' name=\'map\'>Dalaran Sewers</input>\n            <input type=\'radio\' name=\'map\'>Tigers Peak</input>\n            <input type=\'radio\' name=\'map\'>Tol\'varan</input>\n            <input type=\'radio\' name=\'map\'>Ruins of Lordaeron</input>\n            <input type=\'radio\' name=\'map\'>Ashmane\'s Fall</input>\n            <input type=\'radio\' name=\'map\'>Black Rook Hold</input>\n        </div>\n    ',
-	    methods: {
-	        increase: function increase() {
-	            this.$socket.emit('increase');
-	        },
-	        decrease: function decrease() {
-	            this.$socket.emit('decrease');
-	        },
-	        joinRoom: function joinRoom() {
-	            this.$socket.emit('joinRoom', {
-	                roomname: this.$route.params.id,
-	                username: 'user-name'
-	            });
-	        }
-	    },
-	    computed: {
-	        count: function count() {
-	            return this.$store.state.count;
-	        },
-
-	        roomName: function roomName() {
-	            return this.$route.params.id;
-	        }
-	    },
-	    mounted: function mounted() {
-	        this.joinRoom();
-	    }
-	});
-
-	module.exports = mapSelect;
-
-/***/ }),
-/* 84 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	var scoreboard = Vue.component('scoreboard', {
-	    template: '\n        <div>\n            <span>Team1</span>\n            <span>Timer</span>\n            <span>Team2</span>\n        </div>\n    ',
-	    methods: {
-	        increase: function increase() {
-	            this.$socket.emit('increase');
-	        },
-	        decrease: function decrease() {
-	            this.$socket.emit('decrease');
-	        },
-	        joinRoom: function joinRoom() {
-	            this.$socket.emit('joinRoom', {
-	                roomname: this.$route.params.id,
-	                username: 'user-name'
-	            });
-	        }
-	    },
-	    computed: {
-	        count: function count() {
-	            return this.$store.state.count;
-	        },
-
-	        roomName: function roomName() {
-	            return this.$route.params.id;
-	        }
-	    },
-	    mounted: function mounted() {
-	        this.joinRoom();
-	    }
-	});
-
-	module.exports = scoreboard;
 
 /***/ }),
 /* 85 */
@@ -7559,34 +7528,50 @@
 
 	'use strict';
 
+	// http://jsfiddle.net/La8wQ/10/
+	var mapSelect = Vue.component('map-select', {
+	    template: '\n        <div>\n            <template v-for=\'map in maps\'>\n                <input type=\'radio\' name=\'map\'>\n                    <img v-bind:src=\'map.imageUrl\' width=\'100\' heigh=\'70\'>\n                    {{ map.name }}\n                </input>\n            </template>\n            \n        </div>\n    ',
+	    methods: {},
+	    computed: {
+	        maps: function maps() {
+	            return this.$store.state.mapSelect.maps;
+	        }
+	    }
+	});
+
+	module.exports = mapSelect;
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	var scoreboard = Vue.component('scoreboard', {
+	    template: '\n        <div>\n            <div id="red-score">\n                <span>Team1</span>\n                <span>{{ redScore }}</span>\n            </div>\n            \n            <div id="timer">\n                <span>Timer</span>\n            </div>\n\n            <div id="blue-score">\n                <span>Team2</span>\n                <span>{{ blueScore }}</span>\n            </div>\n        </div>\n    ',
+	    methods: {},
+	    computed: {
+	        redScore: function redScore() {
+	            return this.$store.state.scoreboard.redScore;
+	        },
+	        blueScore: function blueScore() {
+	            return this.$store.state.scoreboard.blueScore;
+	        }
+	    }
+	});
+
+	module.exports = scoreboard;
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
 	var team = Vue.component('team', {
 	    template: '\n        <div>\n            <player-select></player-select>\n            <player-select></player-select>\n            <player-select></player-select>\n            <player-select></player-select>\n        </div>\n    ',
-	    methods: {
-	        increase: function increase() {
-	            this.$socket.emit('increase');
-	        },
-	        decrease: function decrease() {
-	            this.$socket.emit('decrease');
-	        },
-	        joinRoom: function joinRoom() {
-	            this.$socket.emit('joinRoom', {
-	                roomname: this.$route.params.id,
-	                username: 'user-name'
-	            });
-	        }
-	    },
-	    computed: {
-	        count: function count() {
-	            return this.$store.state.count;
-	        },
-
-	        roomName: function roomName() {
-	            return this.$route.params.id;
-	        }
-	    },
-	    mounted: function mounted() {
-	        this.joinRoom();
-	    }
+	    methods: {},
+	    computed: {}
 	});
 
 	module.exports = team;

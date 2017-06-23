@@ -2,6 +2,8 @@ const matchRoom = Vue.component('match-room', {
     template: `
         <div>
             <h1>Room: {{ roomName }}</h1>
+            <div id="game-type">Game Type: {{ type }}</div>
+            <div id="bestOf">Best of: {{ bestOf }}</div>
             <team></team>
             <map-select></map-select>
             <scoreboard></scoreboard>
@@ -28,12 +30,18 @@ const matchRoom = Vue.component('match-room', {
         }
     },
     computed: {
+        roomName() {
+            return this.$route.params.id
+        },
+        type(){
+            return this.$store.state.type;
+        },
+        bestOf(){
+            return this.$store.state.bestOf;
+        },
         count() {
             return this.$store.state.count;
-        },
-        roomName: function() {
-            return this.$route.params.id
-        } 
+        }
     },
     mounted() {
         this.joinRoom();
