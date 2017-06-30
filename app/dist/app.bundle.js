@@ -54,7 +54,7 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _router = __webpack_require__(81);
+	var _router = __webpack_require__(82);
 
 	var _router2 = _interopRequireDefault(_router);
 
@@ -66,10 +66,12 @@
 	    router: _router2.default,
 	    store: _store2.default,
 	    el: '#app',
-	    data: {},
 	    sockets: {
 	        update: function update(data) {
 	            _store2.default.commit('update', data);
+	        },
+	        connected: function connected(data) {
+	            _store2.default.commit('connected', data);
 	        }
 	    }
 	});
@@ -7328,23 +7330,32 @@
 
 	var _mapSelect2 = _interopRequireDefault(_mapSelect);
 
+	var _playerSelect = __webpack_require__(81);
+
+	var _playerSelect2 = _interopRequireDefault(_playerSelect);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// https://www.youtube.com/watch?v=2CSr2vBApSI&index=1&list=PL55RiY5tL51pT0DNJraU93FhMzhXxtDAo
 	var store = new Vuex.Store({
 	    state: {
 	        type: null,
-	        bestOf: null
+	        bestOf: null,
+	        id: null
 	    },
 	    mutations: {
 	        update: function update(state, data) {
 	            state.type = data.type;
 	            state.bestOf = data.bestOf;
+	        },
+	        connected: function connected(state, data) {
+	            state.id = data.id;
 	        }
 	    },
 	    modules: {
 	        scoreboard: _scoreboard2.default,
-	        mapSelect: _mapSelect2.default
+	        mapSelect: _mapSelect2.default,
+	        playerSelect: _playerSelect2.default
 	    }
 	});
 
@@ -7392,31 +7403,54 @@
 
 /***/ }),
 /* 81 */
+/***/ (function(module, exports) {
+
+	"use strict";
+
+	var playerSelect = {
+	    state: {
+	        teams: {},
+	        id: String
+	    },
+	    mutations: {
+	        update: function update(state, data) {
+	            state.teams = data.teams;
+	        },
+	        connected: function connected(state, data) {
+	            state.id = data.id;
+	        }
+	    }
+	};
+
+	module.exports = playerSelect;
+
+/***/ }),
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _startRoom = __webpack_require__(82);
+	var _startRoom = __webpack_require__(83);
 
 	var _startRoom2 = _interopRequireDefault(_startRoom);
 
-	var _matchRoom = __webpack_require__(83);
+	var _matchRoom = __webpack_require__(84);
 
 	var _matchRoom2 = _interopRequireDefault(_matchRoom);
 
-	var _playerSelect = __webpack_require__(84);
+	var _playerSelect = __webpack_require__(85);
 
 	var _playerSelect2 = _interopRequireDefault(_playerSelect);
 
-	var _mapSelect = __webpack_require__(85);
+	var _mapSelect = __webpack_require__(86);
 
 	var _mapSelect2 = _interopRequireDefault(_mapSelect);
 
-	var _scoreboard = __webpack_require__(86);
+	var _scoreboard = __webpack_require__(87);
 
 	var _scoreboard2 = _interopRequireDefault(_scoreboard);
 
-	var _team = __webpack_require__(87);
+	var _team = __webpack_require__(88);
 
 	var _team2 = _interopRequireDefault(_team);
 
@@ -7429,7 +7463,7 @@
 	module.exports = router;
 
 /***/ }),
-/* 82 */
+/* 83 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7447,13 +7481,13 @@
 	module.exports = startRoom;
 
 /***/ }),
-/* 83 */
+/* 84 */
 /***/ (function(module, exports) {
 
 	'use strict';
 
 	var matchRoom = Vue.component('match-room', {
-	    template: '\n        <div>\n            <h1>Room: {{ roomName }}</h1>\n            <div id="game-type">Game Type: {{ type }}</div>\n            <div id="bestOf">Best of: {{ bestOf }}</div>\n            <team></team>\n            <map-select></map-select>\n            <scoreboard></scoreboard>\n            <team></team>\n        </div>\n    ',
+	    template: '\n        <div>\n            <h1>Room: {{ roomName }}</h1>\n            <div id="game-type">Game Type: {{ type }}</div>\n            <div id="bestOf">Best of: {{ bestOf }}</div>\n            <team team="red"></team>\n            <map-select></map-select>\n            <scoreboard></scoreboard>\n            <team team="blue"></team>\n        </div>\n    ',
 	    // <span id="number">{{ count }}</span>
 	    //         </br>
 	    //         </br>
@@ -7501,21 +7535,62 @@
 	module.exports = matchRoom;
 
 /***/ }),
-/* 84 */
+/* 85 */
 /***/ (function(module, exports) {
 
 	'use strict';
 
 	var playerSelect = Vue.component('player-select', {
-	    template: '\n        <div>\n            <input type=\'text\' placeholder=\'Nickname\'></input>\n            <select>\n                <option selected=\'true\' disabled>Class</option>\n                <option>Death Knight</option>\n                <option>Demon Hunter</option>\n                <option>Hunter</option>\n                <option>Mage</option>\n                <option>Monk</option>\n                <option>Druid</option>\n                <option>Paladin</option>\n                <option>Priest</option>\n                <option>Rogue</option>\n                <option>Shaman</option>\n                <option>Warlock</option>\n                <option>Warrior</option>\n            </select>\n            <select>\n                <option selected=\'true\' disabled>Specialization</option>\n                <option>Discipline</option>\n                <option>Holy</option>\n                <option>Shadow</option>\n            </select>\n            <input type=\'text\' placeholder=\'Blizzard Id\'></input>\n            <input type=\'text\' placeholder=\'Character Name\'></input>\n            <button>Lock</button>\n        </div>\n    ',
-	    methods: {},
-	    computed: {
-	        count: function count() {
-	            return this.$store.state.count;
+	    props: {
+	        team: {
+	            type: String,
+	            required: true
 	        },
-
-	        roomName: function roomName() {
-	            return this.$route.params.id;
+	        position: {
+	            type: Number,
+	            required: true
+	        },
+	        blizzId: String,
+	        charName: String,
+	        nickname: String,
+	        character: String
+	    },
+	    template: '\n        <div>\n            <div v-if="exists && editable">\n                {{ player.id }}\n                <input type=\'text\' placeholder=\'Nickname\'                    v-bind:nickname=\'nickname\'                    v-on:blur=\'updateNickname($event.target.value)\'></input>\n                <select v-model=\'character\'>\n                    <option selected=\'true\' disabled>Class/Spec</option>\n                    <optgroup label="Death Knight">\n                        <option>Blood</option>\n                        <option>Frost</option>\n                        <option>Unholy</option>\n                    </optgroup>\n                    <optgroup label="Demon Hunter">\n                        <option>Havoc</option>\n                        <option>Vengence</option>\n                    </optgroup>\n                    <optgroup label="Hunter">\n                        <option>Beast Master</option>\n                        <option>Marksmanship</option>\n                        <option>Survival</option>\n                    </optgroup>\n                    <optgroup label="Mage">\n                        <option>Arcane</option>\n                        <option>Fire</option>\n                        <option>Frost</option>\n                    </optgroup>\n                    <optgroup label="Druid">\n                        <option>Balance</option>\n                        <option>Feral</option>\n                        <option>Guardian</option>\n                        <option>Restoration</option>\n                    </optgroup>\n                    <optgroup label="Paladin">\n                        <option>Holy</option>\n                        <option>Retribution</option>\n                        <option>Protection</option>\n                    </optgroup>\n                    <optgroup label="Priest">\n                        <option>Holy</option>\n                        <option>Discipline</option>\n                        <option>Shadow</option>\n                    </optgroup>\n                    <optgroup label="Rogue">\n                        <option>Subtlety</option>\n                        <option>Assassination</option>\n                        <option>Outlaw</option>\n                    </optgroup>\n                    <optgroup label="Shaman">\n                        <option>Restoration</option>\n                        <option>Elemental</option>\n                        <option>Enhancement</option>\n                    </optgroup>\n                    <optgroup label="Warlock">\n                        <option>Destruction</option>\n                        <option>Affliction</option>\n                        <option>Demonology</option>\n                    </optgroup>\n                    <optgroup label="Warrior">\n                        <option>Arms</option>\n                        <option>Protection</option>\n                        <option>Fury</option>\n                    </optgroup>\n                    <optgroup label="Monk">\n                        <option>Mistweaver</option>\n                        <option>Brewmaster</option>\n                        <option>Windwalker</option>\n                    </optgroup>\n                </select>\n                <input type=\'text\' placeholder=\'Blizzard Id\'                    v-bind:blizzId=\'blizzId\'                    v-on:blur=\'updateBlizzId($event.target.value)\'></input>\n                <input type=\'text\' placeholder=\'Character Name\'                    v-bind:charName=\'charName\'                    v-on:blur=\'updateCharName($event.target.value)\'></input>\n\n                <button @click="submit()">Submit</button>\n            </div>\n            <div v-else-if="exists && !editable">\n                {{ player.id }}\n                {{ player.nickname }}\n                {{ player.blizzId }}\n                {{ player.charName }}\n            </div> \n            <div v-else>\n                empty\n            </div> \n        </div>\n    ',
+	    methods: {
+	        updateNickname: function updateNickname(nickname) {
+	            this.$socket.emit('set-nickname', {
+	                team: this.team,
+	                positon: this.position,
+	                nickname: nickname });
+	        },
+	        updateBlizzId: function updateBlizzId(blizzId) {
+	            this.$socket.emit('set-blizzId', {
+	                team: this.team,
+	                positon: this.position,
+	                blizzId: blizzId });
+	        },
+	        updateCharName: function updateCharName(charName) {
+	            this.$socket.emit('set-charName', {
+	                team: this.team,
+	                positon: this.position,
+	                charName: charName });
+	        },
+	        submit: function submit() {
+	            console.log(this);
+	            return;
+	        }
+	    },
+	    computed: {
+	        exists: function exists() {
+	            if (this.$store.state.playerSelect.teams[this.team] !== undefined && this.$store.state.playerSelect.teams[this.team]["players"][this.position] !== undefined) {
+	                return true;
+	            } else return false;
+	        },
+	        player: function player() {
+	            return this.$store.state.playerSelect.teams[this.team]["players"][this.position];
+	        },
+	        editable: function editable() {
+	            return this.$store.state.playerSelect.id === this.$store.state.playerSelect.teams[this.team]["players"][this.position]["id"];
 	        }
 	    }
 	});
@@ -7523,7 +7598,7 @@
 	module.exports = playerSelect;
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7542,7 +7617,7 @@
 	module.exports = mapSelect;
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -7563,14 +7638,26 @@
 	module.exports = scoreboard;
 
 /***/ }),
-/* 87 */
+/* 88 */
 /***/ (function(module, exports) {
 
 	'use strict';
 
 	var team = Vue.component('team', {
-	    template: '\n        <div>\n            <player-select></player-select>\n            <player-select></player-select>\n            <player-select></player-select>\n            <player-select></player-select>\n        </div>\n    ',
-	    methods: {},
+	    props: {
+	        team: {
+	            type: String,
+	            required: true
+	        }
+	    },
+	    template: '\n        <div>\n            <button @click=\'joinTeam()\'>Join {{team}} Team</button>\n            <player-select :team=\'team\' :position=\'0\'></player-select>\n            <player-select :team=\'team\' :position=\'1\'></player-select>\n            <player-select :team=\'team\' :position=\'2\'></player-select>\n            <player-select :team=\'team\' :position=\'3\'></player-select>\n        </div>\n    ',
+	    methods: {
+	        joinTeam: function joinTeam() {
+	            this.$socket.emit('joinTeam', {
+	                team: this.team
+	            });
+	        }
+	    },
 	    computed: {}
 	});
 

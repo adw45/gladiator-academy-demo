@@ -8,11 +8,12 @@ var app = new Vue({
     router, 
     store,
     el: '#app',
-    data: {
-    },
     sockets: {
         update: function(data) {
             store.commit('update', data)
+        },
+        connected: function(data) {
+            store.commit('connected', data)
         }
     }
 });
