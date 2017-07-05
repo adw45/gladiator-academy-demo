@@ -16,7 +16,7 @@ const team = Vue.component('team', {
     `,
     methods: {
         joinTeam: function() {
-            this.$socket.emit('joinTeam', {
+            this.$socket.emit('join-team', {
                 team: this.team, 
             })
         }

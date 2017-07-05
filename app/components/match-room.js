@@ -23,9 +23,8 @@ const matchRoom = Vue.component('match-room', {
             this.$socket.emit('decrease')
         },
         joinRoom: function() {
-            this.$socket.emit('joinRoom', {
-                roomname: this.$route.params.id,
-                username: 'user-name'
+            this.$socket.emit('join-room', {
+                roomname: this.$route.params.id
             })
         }
     },

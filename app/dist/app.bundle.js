@@ -7501,9 +7501,8 @@
 	            this.$socket.emit('decrease');
 	        },
 	        joinRoom: function joinRoom() {
-	            this.$socket.emit('joinRoom', {
-	                roomname: this.$route.params.id,
-	                username: 'user-name'
+	            this.$socket.emit('join-room', {
+	                roomname: this.$route.params.id
 	            });
 	        }
 	    },
@@ -7653,7 +7652,7 @@
 	    template: '\n        <div>\n            <button @click=\'joinTeam()\'>Join {{team}} Team</button>\n            <player-select :team=\'team\' :position=\'0\'></player-select>\n            <player-select :team=\'team\' :position=\'1\'></player-select>\n            <player-select :team=\'team\' :position=\'2\'></player-select>\n            <player-select :team=\'team\' :position=\'3\'></player-select>\n        </div>\n    ',
 	    methods: {
 	        joinTeam: function joinTeam() {
-	            this.$socket.emit('joinTeam', {
+	            this.$socket.emit('join-team', {
 	                team: this.team
 	            });
 	        }
