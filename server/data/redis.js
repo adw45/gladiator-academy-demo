@@ -3,8 +3,13 @@ var redis = require('redis'),
     unflatten = require('flat').unflatten,
     _ = require('lodash'),
     helpers = require('../helper.js')
-    client = redis.createClient();
+    client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com', {
+        no_ready_check: true
+    });
 
+client.auth('jXniWNrk4sQ2DGo8', function (err) {
+    if (err) throw err;
+});
 
 var joinRoom = function(request) {
     return new Promise(function(resolve, reject){
