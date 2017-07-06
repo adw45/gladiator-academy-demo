@@ -1,7 +1,7 @@
 var io = require('socket.io'),
-    redis = require('../data/redis.js'),
-    roomController = require('../controllers/team-controller.js'),
-    playerController = require('../controllers/player-controller.js');
+    matchController = require('../controllers/match-controller.js'),
+    playerController = require('../controllers/player-controller.js'),
+    teamController = require('../controllers/team-controller.js');
     
 var socketio = function(server) {
     io = io(server);
@@ -9,45 +9,34 @@ var socketio = function(server) {
         socket.emit('connected', { id: socket.id })
 
         socket.on('disconnect', function() {
-            redis.leaveRoom({
-                id: socket.id,
-                matchId: socket.matchId
-            }).then((response) => {
-                update(socket.matchId, response);
-                socket.leave(socket.matchId);
-            
-                if (!io.sockets.adapter.rooms[socket.matchId]) {
-                    redis.deleteRoom({
-                        matchId: socket.matchId
-                    });
-                }
-            });    
+            matchController.leave({id: socket.id, matchId: socket.matchId}, update)
+            socket.leave(socket.matchId);
+            if (!io.sockets.adapter.rooms[socket.matchId]) {
+                matchController.destroy({matchId: socket.matchId});
+            }   
         });
 
         socket.on('join-room', function(data) {
+            if (socket.matchId) {
+                matchController.leave({id: socket.id, matchId: socket.matchId}, update);
+            }
             socket.join(data.roomname);
             socket.matchId = data.roomname;
-            
-            redis.joinRoom({
-                roomname: socket.matchId
-            }).then((response) => {
-                update(socket.matchId, response);
-            });
+            matchController.join({matchId: socket.matchId}, data, update);
         });
 
         socket.on('join-team', function(data) {
-            redis.joinTeam({ 
-                id: socket.id,
-                roomname: socket.matchId
-            }, data).then((response) => {
-                update(socket.matchId, response);
-            });
+            teamController.join({id: socket.id, matchId: socket.matchId}, data, update);
+        });
+        
+        socket.on('leave-team', function(data) {
+            teamController.leave({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('set-nickname', function(data) {
             playerController.nickname({id: socket.id, matchId: socket.matchId}, data, update);
         });
-
+        
         socket.on('set-blizzId', function(data) {
             playerController.blizzId({id: socket.id, matchId: socket.matchId}, data, update);
         });

@@ -7,76 +7,40 @@ client.auth('jXniWNrk4sQ2DGo8', function(err) {
     if (err) throw err;
 });
 
-var updateField = function(request, transform) {
+var getMatch = function(request) {
+    return new Promise(function(resolve, reject){
+        client.get(request.matchId, function(err, match){
+            resolve(JSON.parse(match));
+        });
+    })
+};
+
+var createMatch = function(request) {
+    return new Promise(function(resolve, reject){
+        client.set(request.matchId, JSON.stringify(helpers.initializeRoom()));
+        resolve(getMatch(request));
+    });
+};
+
+var updateMatch = function(request, transform) {
     return new Promise(function(resolve, reject) {
         client.get(request.matchId, function(err, match) {
             match = transform(JSON.parse(match));
-            client.set(request.matchId, JSON.stringify(match), redis.print);
+            client.set(request.matchId, JSON.stringify(match));
             resolve(match);
         });
     });
-}
+};
 
-var joinRoom = function(request) {
+var deleteMatch = function(data) {
     return new Promise(function(resolve, reject){
-        client.get(request.roomname, function(err, match) {
-            if(!match) {
-                var room = helpers.initializeRoom();
-                client.set(request.roomname, JSON.stringify(room), redis.print);
-                resolve(room);
-            }
-            resolve(JSON.parse(match));
-        });
+        client.DEL(data.matchId);
     });
-}
-
-var leaveRoom = function(request) {
-    return new Promise(function(resolve, reject){
-        client.get(request.matchId, function(err, match){
-            match = JSON.parse(match);
-            
-            if(match) {
-                _.remove(match.teams.red.players, { id: request.id });
-                _.remove(match.teams.blue.players, { id: request.id });
-            }
-
-            client.set(request.matchId, JSON.stringify(match), redis.print);
-            resolve(match);
-        });
-    });
-}
-
-var joinTeam = function(request, data) {
-    return new Promise(function(resolve, reject){
-        client.get(request.roomname, function(err, match) {
-            match = JSON.parse(match);
-
-            if (match.teams[data.team].players.size >= 4) {
-                reject('Room full');
-            }
-            
-            _.remove(match.teams.red.players, { id: request.id });
-            _.remove(match.teams.blue.players, { id: request.id });
-
-            match.teams[data.team].players.push({
-                id: request.id,
-                leader: false
-            });
-
-            client.set(request.roomname, JSON.stringify(match), redis.print);
-            resolve(match);
-        });
-    });
-}
-
-var deleteRoom = function(data) {
-    client.DEL(data.matchId, redis.print);
-}
+};
 
 module.exports = {
-    joinRoom,
-    leaveRoom,
-    deleteRoom,
-    joinTeam,
-    updateField
+    getMatch,
+    createMatch,
+    updateMatch,
+    deleteMatch
 };

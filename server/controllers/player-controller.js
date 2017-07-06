@@ -2,7 +2,7 @@ var redis = require('../data/redis.js'),
     _  = require('lodash');
 
 var nickname = (request, data, update) => {
-    redis.updateField(request, (match) => {
+    redis.updateMatch(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
                 player.nickname = data.nickname
@@ -15,7 +15,7 @@ var nickname = (request, data, update) => {
 }
 
 var blizzId = (request, data, update) => {
-    redis.updateField(request, (match) => {
+    redis.updateMatch(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
                 player.blizzId = data.blizzId
@@ -28,7 +28,7 @@ var blizzId = (request, data, update) => {
 }
 
 var charName = (request, data, update) => {
-    redis.updateField(request, (match) => {
+    redis.updateMatch(request, (match) => {
        _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
                 player.charName = data.charName
@@ -41,7 +41,7 @@ var charName = (request, data, update) => {
 }
 
 var classSpec = (request, data, update) => {
-    redis.updateField(request, (match) => {
+    redis.updateMatch(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             // not implemented
         });
@@ -52,7 +52,7 @@ var classSpec = (request, data, update) => {
 }
 
 var leader = (request, data, update) => {
-    redis.updateField(request, (match) => {
+    redis.updateMatch(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             // not implemented
         });
