@@ -3,21 +3,21 @@ var io = require('socket.io'),
     roomController = require('../controllers/room.js')
     _ = require('lodash');
     
-var socketio = function (server) {
+var socketio = function(server) {
     io = io(server);
-    io.on('connection', function (socket) {
+    io.on('connection', function(socket) {
         socket.emit('connected', { id: socket.id })
 
-        socket.on('disconnect', function () {
+        socket.on('disconnect', function() {
+            const room = socket.room;
             redis.leaveRoom({
                 roomname: socket.roomname,
                 id: socket.id
             }).then((response) => {
                 update(socket.room, response);
-                socket.leave(socket.room);
+                socket.leave(room);
             });
-
-            console.log(io.sockets.adapter.rooms[socket.room]);
+            
             if (!io.sockets.adapter.rooms[socket.room]) {
                 redis.deleteRoom({
                     roomname: socket.roomname
@@ -25,7 +25,7 @@ var socketio = function (server) {
             }
         })
 
-        socket.on('join-room', function (data) {
+        socket.on('join-room', function(data) {
             socket.join(data.roomname);
             socket.room = data.roomname;
             
@@ -36,7 +36,7 @@ var socketio = function (server) {
             });
         });
 
-        socket.on('join-team', function (data) {
+        socket.on('join-team', function(data) {
             redis.joinTeam({ 
                 id: socket.id,
                 roomname: socket.roomname
@@ -45,7 +45,7 @@ var socketio = function (server) {
             });
         });
 
-        socket.on('set-nickname', function (data) {
+        socket.on('set-nickname', function(data) {
             redis.setNickname({
                 id: socket.id,
                 roomname: socket.roomname
@@ -54,7 +54,7 @@ var socketio = function (server) {
             });
         });
 
-        socket.on('set-blizzId', function (data) {
+        socket.on('set-blizzId', function(data) {
             redis.setBlizzId({
                 id: socket.id,
                 roomname: socket.roomname
@@ -63,7 +63,7 @@ var socketio = function (server) {
             });
         });
 
-        socket.on('set-charName', function (data) {
+        socket.on('set-charName', function(data) {
             redis.setCharName({
                 id: socket.id,
                 roomname: socket.roomname
@@ -72,7 +72,7 @@ var socketio = function (server) {
             });
         });
 
-        var update = function (room, data) {
+        var update = function(room, data) {
             io.in(room).emit('update', data);
         };
     });

@@ -13,6 +13,6 @@ app.use('/_api', routes);
 
 var port = process.env.PORT || 3000;
 
-server.listen(port, function () {
+server.listen(port, function() {
   console.log('Example app listening on port', port)
 });

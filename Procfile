@@ -1,0 +1,1 @@
+web: webpack && npm run app

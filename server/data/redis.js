@@ -1,13 +1,9 @@
 var redis = require('redis'),
-    flatten = require('flat'),
-    unflatten = require('flat').unflatten,
     _ = require('lodash'),
     helpers = require('../helper.js')
-    client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com', {
-        no_ready_check: true
-    });
+    client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com');
 
-client.auth('jXniWNrk4sQ2DGo8', function (err) {
+client.auth('jXniWNrk4sQ2DGo8', function(err) {
     if (err) throw err;
 });
 
@@ -25,7 +21,7 @@ var joinRoom = function(request) {
 }
 
 var leaveRoom = function(request) {
-    return new Promise(function (resolve, reject){
+    return new Promise(function(resolve, reject){
         client.get(request.roomname, function(err, match){
             match = JSON.parse(match);
             
@@ -128,5 +124,4 @@ module.exports = {
     setCharName,
     leaveRoom,
     deleteRoom
-}
-
+};
