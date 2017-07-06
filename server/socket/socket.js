@@ -1,7 +1,7 @@
 var io = require('socket.io'),
     redis = require('../data/redis.js'),
-    roomController = require('../controllers/room.js')
-    _ = require('lodash');
+    roomController = require('../controllers/team-controller.js'),
+    playerController = require('../controllers/player-controller.js');
     
 var socketio = function(server) {
     io = io(server);
@@ -46,30 +46,15 @@ var socketio = function(server) {
         });
 
         socket.on('set-nickname', function(data) {
-            redis.setNickname({
-                id: socket.id,
-                roomname: socket.roomname
-            }, data).then((response) => {
-                update(socket.room, response);
-            });
+            update(socket.room, playerController.nickname({id: socket.id, roomname: socket.roomname}, data));
         });
 
         socket.on('set-blizzId', function(data) {
-            redis.setBlizzId({
-                id: socket.id,
-                roomname: socket.roomname
-            }, data).then((response) => {
-                update(socket.room, response)
-            });
+            update(socket.room, playerController.blizzId({id: socket.id, roomname: socket.roomname}, data));
         });
 
         socket.on('set-charName', function(data) {
-            redis.setCharName({
-                id: socket.id,
-                roomname: socket.roomname
-            }, data).then((response) => {
-                update(socket.room, response);
-            });
+            update(socket.room, playerController.charName({id: socket.id, roomname: socket.roomname}, data));
         });
 
         var update = function(room, data) {

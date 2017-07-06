@@ -1,11 +1,21 @@
 var redis = require('redis'),
     _ = require('lodash'),
-    helpers = require('../helper.js')
+    helpers = require('../helper.js'),
     client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com');
 
 client.auth('jXniWNrk4sQ2DGo8', function(err) {
     if (err) throw err;
 });
+
+var updateField = function(request, transform) {
+    return new Promise(function(resolve, reject) {
+        client.get(request.roomname, function(err, match) {
+            match = transform(JSON.parse(match));
+            client.set(request.roomname, JSON.stringify(match), redis.print);
+            resolve(match);
+        });
+    });
+}
 
 var joinRoom = function(request) {
     return new Promise(function(resolve, reject){
@@ -59,58 +69,6 @@ var joinTeam = function(request, data) {
     });
 }
 
-var setNickname = function(request, data) {
-    return new Promise(function(resolve, reject) {
-        client.get(request.roomname, function(err, match) {
-            match = JSON.parse(match);
-
-            _.forEach(match.teams[data.team].players, (player) => {
-                if (player.id === request.id) {
-                    player.nickname = data.nickname
-                }
-            });
-
-            client.set(request.roomname, JSON.stringify(match), redis.print);
-            resolve(match);
-        });
-    });
-
-}
-
-var setBlizzId = function(request, data) {
-    return new Promise(function(resolve, reject){
-        client.get(request.roomname, function(err, match) {
-            match = JSON.parse(match);
-
-             _.forEach(match.teams[data.team].players, (player) => {
-                if (player.id === request.id) {
-                    player.blizzId = data.blizzId
-                }
-            })
-
-            client.set(request.roomname, JSON.stringify(match), redis.print);
-            resolve(match);
-        });
-    });
-}
-
-var setCharName = function(request, data) {
-    return new Promise(function(resolve, reject) {
-        client.get(request.roomname, function(err, match) {
-            match = JSON.parse(match);
-
-            _.forEach(match.teams[data.team].players, (player) => {
-                if (player.id === request.id) {
-                    player.charName = data.charName
-                }
-            });
-
-            client.set(request.roomname, JSON.stringify(match), redis.print);
-            resolve(match);
-        });
-    });
-}
-
 var deleteRoom = function(data) {
     client.DEL(data.roomname, redis.print);
 }
@@ -118,10 +76,7 @@ var deleteRoom = function(data) {
 module.exports = {
     joinRoom,
     leaveRoom,
+    deleteRoom,
     joinTeam,
-    setNickname,
-    setBlizzId,
-    setCharName,
-    leaveRoom,
-    deleteRoom
+    updateField
 };
