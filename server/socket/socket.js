@@ -9,56 +9,55 @@ var socketio = function(server) {
         socket.emit('connected', { id: socket.id })
 
         socket.on('disconnect', function() {
-            const room = socket.room;
             redis.leaveRoom({
-                roomname: socket.roomname,
-                id: socket.id
+                id: socket.id,
+                matchId: socket.matchId
             }).then((response) => {
-                update(socket.room, response);
-                socket.leave(room);
-            });
+                update(socket.matchId, response);
+                socket.leave(socket.matchId);
             
-            if (!io.sockets.adapter.rooms[socket.room]) {
-                redis.deleteRoom({
-                    roomname: socket.roomname
-                });
-            }
-        })
+                if (!io.sockets.adapter.rooms[socket.matchId]) {
+                    redis.deleteRoom({
+                        matchId: socket.matchId
+                    });
+                }
+            });    
+        });
 
         socket.on('join-room', function(data) {
             socket.join(data.roomname);
-            socket.room = data.roomname;
+            socket.matchId = data.roomname;
             
             redis.joinRoom({
-                roomname: socket.roomname
+                roomname: socket.matchId
             }).then((response) => {
-                update(socket.room, response);
+                update(socket.matchId, response);
             });
         });
 
         socket.on('join-team', function(data) {
             redis.joinTeam({ 
                 id: socket.id,
-                roomname: socket.roomname
+                roomname: socket.matchId
             }, data).then((response) => {
-                update(socket.room, response);
+                update(socket.matchId, response);
             });
         });
 
         socket.on('set-nickname', function(data) {
-            update(socket.room, playerController.nickname({id: socket.id, roomname: socket.roomname}, data));
+            playerController.nickname({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('set-blizzId', function(data) {
-            update(socket.room, playerController.blizzId({id: socket.id, roomname: socket.roomname}, data));
+            playerController.blizzId({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('set-charName', function(data) {
-            update(socket.room, playerController.charName({id: socket.id, roomname: socket.roomname}, data));
+            playerController.charName({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        var update = function(room, data) {
-            io.in(room).emit('update', data);
+        var update = function(matchId, data) {
+            io.in(matchId).emit('update', data);
         };
     });
 };

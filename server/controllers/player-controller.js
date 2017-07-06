@@ -1,8 +1,7 @@
 var redis = require('../data/redis.js'),
     _  = require('lodash');
 
-var nickname = (request, data) => {
-    console.log('nickname\n');
+var nickname = (request, data, update) => {
     redis.updateField(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
@@ -11,11 +10,11 @@ var nickname = (request, data) => {
         });
         return match;
     }).then(function(response){
-        return response;
+        update(request.matchId, response);
     });
 }
 
-var blizzId = (request, data) => {
+var blizzId = (request, data, update) => {
     redis.updateField(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
@@ -24,11 +23,11 @@ var blizzId = (request, data) => {
         });
         return match;
     }).then(function(response){
-        return response;
+        update(request.matchId, response);
     });
 }
 
-var charName = (request, data) => {
+var charName = (request, data, update) => {
     redis.updateField(request, (match) => {
        _.forEach(match.teams[data.team].players, (player) => {
             if (player.id === request.id) {
@@ -37,29 +36,29 @@ var charName = (request, data) => {
         });
         return match;
     }).then(function(response){
-        return response;
+        update(request.matchId, response);
     });
 }
 
-var classSpec = (request, data) => {
+var classSpec = (request, data, update) => {
     redis.updateField(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             // not implemented
         });
         return match;
     }).then(function(response){
-        return response;
+        update(request.matchId, response);
     });
 }
 
-var leader = (request, data) => {
+var leader = (request, data, update) => {
     redis.updateField(request, (match) => {
         _.forEach(match.teams[data.team].players, (player) => {
             // not implemented
         });
         return match;
     }).then(function(response){
-        return response;
+        update(request.matchId, response);
     });
 }
 

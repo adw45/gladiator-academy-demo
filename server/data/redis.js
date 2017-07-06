@@ -9,9 +9,9 @@ client.auth('jXniWNrk4sQ2DGo8', function(err) {
 
 var updateField = function(request, transform) {
     return new Promise(function(resolve, reject) {
-        client.get(request.roomname, function(err, match) {
+        client.get(request.matchId, function(err, match) {
             match = transform(JSON.parse(match));
-            client.set(request.roomname, JSON.stringify(match), redis.print);
+            client.set(request.matchId, JSON.stringify(match), redis.print);
             resolve(match);
         });
     });
@@ -32,7 +32,7 @@ var joinRoom = function(request) {
 
 var leaveRoom = function(request) {
     return new Promise(function(resolve, reject){
-        client.get(request.roomname, function(err, match){
+        client.get(request.matchId, function(err, match){
             match = JSON.parse(match);
             
             if(match) {
@@ -40,7 +40,7 @@ var leaveRoom = function(request) {
                 _.remove(match.teams.blue.players, { id: request.id });
             }
 
-            client.set(request.roomname, JSON.stringify(match), redis.print);
+            client.set(request.matchId, JSON.stringify(match), redis.print);
             resolve(match);
         });
     });
@@ -70,7 +70,7 @@ var joinTeam = function(request, data) {
 }
 
 var deleteRoom = function(data) {
-    client.DEL(data.roomname, redis.print);
+    client.DEL(data.matchId, redis.print);
 }
 
 module.exports = {
