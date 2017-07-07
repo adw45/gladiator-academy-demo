@@ -20,7 +20,6 @@
     "lodash": "^4.17.4",
     "redis": "^2.7.1",
     "socket.io": "^2.0.1",
-    "vue-socket.io": "^2.1.1-a",
     "webpack": "^1.12.2"
   },
   "devDependencies": {

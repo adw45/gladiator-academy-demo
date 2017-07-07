@@ -1,28 +1,41 @@
 var redis = require('../data/redis.js'),
     _ = require('lodash');
 
-const join = (request, data, update) => {
+var join = (request, data, update) => {
     redis.updateMatch(request, (match) => {
         if (match.teams[data.team].players.size >= 4) {
-            reject('Room full');
+            console.log(request, data, 'Room full');
         }
-        _.remove(match.teams.red.players, { id: request.id });
-        _.remove(match.teams.blue.players, { id: request.id });
+    
+        var removed = _.remove(match.teams[data.team === 'red' ? 'blue' : 'red'].players, {id: request.id})[0];
+        if (removed && removed.leader 
+            && !_.isEmpty(match.teams[data.team === 'red' ? 'blue' : 'red'].players)
+        ){
+            match.teams[data.team === 'red' ? 'blue' : 'red'].players[0].leader = true
+        }
 
-        match.teams[data.team].players.push({
-            id: request.id,
-            leader: false
-        });
+        if (!_.find(match.teams[data.team].players, {id: request.id})) {
+            match.teams[data.team].players.push({
+                id: request.id,
+                leader: _.isEmpty(match.teams[data.team].players)
+            });
+        }
         return match;
     }).then((response) => {
         update(request.matchId, response);
     });
 };
 
-const leave = (request, data, update) => {
+
+var leave = (request, data, update) => {
     redis.updateMatch(request, (match) => {
-        _.remove(match.teams.red.players, { id: request.id });
-        _.remove(match.teams.blue.players, { id: request.id });
+        var removed = _.remove(match.teams[data.team].players, {id: request.id})[0];
+        if (removed 
+            && removed.leader 
+            && !_.isEmpty(match.teams[data.team].players)
+        ){
+            match.teams[data.team].players[0].leader = true
+        }
         return match;
     }).then((response) => {
         update(request.matchId, response);

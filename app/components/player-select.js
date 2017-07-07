@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const playerSelect = Vue.component('player-select', {
     props: {
         team: {
@@ -11,12 +13,16 @@ const playerSelect = Vue.component('player-select', {
         blizzId: String,
         charName: String,
         nickname: String,
-        character: String
+        character: String, 
+        leader: String
     },
     template: `
         <div>
             <div v-if="exists && editable">
                 {{ player.id }}
+                <span v-if="player.leader">
+                    L 
+                </span>
                 <input type='text' placeholder='Nickname'\
                     v-bind:nickname='nickname'\
                     v-on:blur='updateNickname($event.target.value)'></input>
@@ -94,6 +100,10 @@ const playerSelect = Vue.component('player-select', {
             </div>
             <div v-else-if="exists && !editable">
                 {{ player.id }}
+                <span v-if="player.leader">
+                    L 
+                </span> 
+                <button v-if="isLeader && sameTeam" @click="updateLeader(player.id)">Make Leader</button>
                 {{ player.nickname }}
                 {{ player.blizzId }}
                 {{ player.charName }}
@@ -122,6 +132,13 @@ const playerSelect = Vue.component('player-select', {
                 positon: this.position, 
                 charName: charName });
         },
+        updateLeader(id) {
+            this.$socket.emit('set-leader', { 
+                team: this.team, 
+                positon: this.position,
+                playerId: id
+            })
+        },
         submit() {
             console.log(this);
             return 
@@ -141,6 +158,26 @@ const playerSelect = Vue.component('player-select', {
         editable() {
             return this.$store.state.playerSelect.id === 
                 this.$store.state.playerSelect.teams[this.team]["players"][this.position]["id"];
+        },
+        isLeader() {
+            var thisPlayer = _.find(this.$store.state.playerSelect.teams.red.players, { id: this.$store.state.playerSelect.id });
+            if (!thisPlayer) {
+                thisPlayer = _.find(this.$store.state.playerSelect.teams.blue.players, { id: this.$store.state.playerSelect.id });
+            }
+            return thisPlayer && thisPlayer.leader;
+        },
+        sameTeam() {
+            if (this.team ===  'red'
+                 && _.find(this.$store.state.playerSelect.teams.red.players, { id: this.$store.state.playerSelect.id })
+            ){
+                return true;
+            }
+            if (this.team == 'blue'
+                &&_.find(this.$store.state.playerSelect.teams.blue.players, { id: this.$store.state.playerSelect.id })
+            ){
+                return true;
+            }
+            return false
         }
     }
 });
