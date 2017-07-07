@@ -45,9 +45,13 @@ var socketio = function(server) {
             playerController.charName({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
+        socket.on('set-spec', function(data){
+            playerController.spec({id: socket.id, matchId: socket.matchId}, data, update);
+        });
+
         socket.on('set-leader', function(data){
             playerController.leader({id: socket.id, matchId: socket.matchId}, data, update);
-        })
+        });
 
         var update = function(matchId, data) {
             io.in(matchId).emit('update', data);

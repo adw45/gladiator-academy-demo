@@ -31,11 +31,10 @@ var charName = (request, data, update) => {
     });
 };
 
-var classSpec = (request, data, update) => {
+var spec = (request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
-
-        // not implemented
+        player.spec = data.spec;
         return match;
     }).then(function(response){
         update(request.matchId, response);
@@ -60,6 +59,6 @@ module.exports = {
     nickname,
     blizzId,
     charName,
-    classSpec,
+    spec,
     leader
 };

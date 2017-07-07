@@ -10,11 +10,10 @@ const playerSelect = Vue.component('player-select', {
             type: Number,
             required: true
         },
+        nickname: String,
         blizzId: String,
         charName: String,
-        nickname: String,
-        character: String, 
-        leader: String
+        spec: String
     },
     template: `
         <div>
@@ -23,79 +22,77 @@ const playerSelect = Vue.component('player-select', {
                 <span v-if="player.leader">
                     L 
                 </span>
-                <input type='text' placeholder='Nickname'\
+                <input type='text' :value='player.nickname' placeholder='Nickname' \
                     v-bind:nickname='nickname'\
                     v-on:blur='updateNickname($event.target.value)'></input>
-                <select v-model='character'>
-                    <option selected='true' disabled>Class/Spec</option>
+                <select :value='player.spec' v-bind:spec='spec' v-on:change='updateSpec($event.target.value)'>
                     <optgroup label="Death Knight">
-                        <option>Blood</option>
-                        <option>Frost</option>
-                        <option>Unholy</option>
+                        <option value='dk-blood'>Blood</option>
+                        <option value='dk-frost'>Frost</option>
+                        <option value='dk-unholy'>Unholy</option>
                     </optgroup>
                     <optgroup label="Demon Hunter">
-                        <option>Havoc</option>
-                        <option>Vengence</option>
+                        <option value='dh-havoc'>Havoc</option>
+                        <option value='dh-vengence'>Vengence</option>
                     </optgroup>
                     <optgroup label="Hunter">
-                        <option>Beast Master</option>
-                        <option>Marksmanship</option>
-                        <option>Survival</option>
+                        <option value='hunter-beastmaster'>Beast Master</option>
+                        <option value='hunter-marksmanship'>Marksmanship</option>
+                        <option value='hunter-survival'>Survival</option>
                     </optgroup>
                     <optgroup label="Mage">
-                        <option>Arcane</option>
-                        <option>Fire</option>
-                        <option>Frost</option>
+                        <option value='mage-arcane'>Arcane</option>
+                        <option value='mage-fire'>Fire</option>
+                        <option value='mage-frost'>Frost</option>
                     </optgroup>
                     <optgroup label="Druid">
-                        <option>Balance</option>
-                        <option>Feral</option>
-                        <option>Guardian</option>
-                        <option>Restoration</option>
+                        <option value='druid-balance'>Balance</option>
+                        <option value='druid-feral'>Feral</option>
+                        <option value='druid-guardian'>Guardian</option>
+                        <option value='druid-restoration'>Restoration</option>
                     </optgroup>
                     <optgroup label="Paladin">
-                        <option>Holy</option>
-                        <option>Retribution</option>
-                        <option>Protection</option>
+                        <option value='paladin-holy'>Holy</option>
+                        <option value='paladin-retribution'>Retribution</option>
+                        <option value='paladin-protection'>Protection</option>
                     </optgroup>
                     <optgroup label="Priest">
-                        <option>Holy</option>
-                        <option>Discipline</option>
-                        <option>Shadow</option>
+                        <option value='priest-holy'>Holy</option>
+                        <option value='priest-discipline'>Discipline</option>
+                        <option value='priest-shadow'>Shadow</option>
                     </optgroup>
                     <optgroup label="Rogue">
-                        <option>Subtlety</option>
-                        <option>Assassination</option>
-                        <option>Outlaw</option>
+                        <option value='rogue-subtlety'>Subtlety</option>
+                        <option value='rogue-assassination'>Assassination</option>
+                        <option value='rogue-outlaw'>Outlaw</option>
                     </optgroup>
                     <optgroup label="Shaman">
-                        <option>Restoration</option>
-                        <option>Elemental</option>
-                        <option>Enhancement</option>
+                        <option value='shaman-restoration'>Restoration</option>
+                        <option value='shaman-elemental'>Elemental</option>
+                        <option value='shaman-enhancement'>Enhancement</option>
                     </optgroup>
                     <optgroup label="Warlock">
-                        <option>Destruction</option>
-                        <option>Affliction</option>
-                        <option>Demonology</option>
+                        <option value='warlock-destruction'>Destruction</option>
+                        <option value='warlock-afflication'>Affliction</option>
+                        <option value='warlock-demonology'>Demonology</option>
                     </optgroup>
                     <optgroup label="Warrior">
-                        <option>Arms</option>
-                        <option>Protection</option>
-                        <option>Fury</option>
+                        <option value='warrior-arms'>Arms</option>
+                        <option value='warrior-protection'>Protection</option>
+                        <option value='warrior-fury'>Fury</option>
                     </optgroup>
                     <optgroup label="Monk">
-                        <option>Mistweaver</option>
-                        <option>Brewmaster</option>
-                        <option>Windwalker</option>
+                        <option value='monk-mistweaver'>Mistweaver</option>
+                        <option value='monk-brewmaster'>Brewmaster</option>
+                        <option value='monk-windwalker'>Windwalker</option>
                     </optgroup>
                 </select>
-                <input type='text' placeholder='Blizzard Id'\
+                <input type='text' :value='player.blizzId' placeholder='Blizzard Id'\
                     v-bind:blizzId='blizzId'\
                     v-on:blur='updateBlizzId($event.target.value)'></input>
-                <input type='text' placeholder='Character Name'\
+                <input type='text' :value='player.charName' placeholder='Character Name'\
                     v-bind:charName='charName'\
                     v-on:blur='updateCharName($event.target.value)'></input>
-
                 <button @click="submit()">Submit</button>
             </div>
             <div v-else-if="exists && !editable">
@@ -105,6 +102,7 @@ const playerSelect = Vue.component('player-select', {
                 </span> 
                 <button v-if="isLeader && sameTeam" @click="updateLeader(player.id)">Make Leader</button>
                 {{ player.nickname }}
+                {{ player.spec }}
                 {{ player.blizzId }}
                 {{ player.charName }}
             </div> 
@@ -118,26 +116,36 @@ const playerSelect = Vue.component('player-select', {
             this.$socket.emit('set-nickname', { 
                 team: this.team, 
                 positon: this.position, 
-                nickname: nickname });
+                nickname: nickname 
+            });
         },
         updateBlizzId(blizzId) {
             this.$socket.emit('set-blizzId', { 
                 team: this.team, 
                 positon: this.position, 
-                blizzId: blizzId });
+                blizzId: blizzId 
+            });
         },
         updateCharName(charName) {
             this.$socket.emit('set-charName', { 
                 team: this.team, 
                 positon: this.position, 
-                charName: charName });
+                charName: charName 
+            });
         },
-        updateLeader(id) {
+        updateLeader(playerId) {
             this.$socket.emit('set-leader', { 
                 team: this.team, 
                 positon: this.position,
                 playerId: id
-            })
+            });
+        },
+        updateSpec(spec){
+            this.$socket.emit('set-spec', { 
+                team: this.team, 
+                positon: this.position,
+                spec: spec
+            });
         },
         submit() {
             console.log(this);

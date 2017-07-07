@@ -15,10 +15,22 @@ var join = (request, data, update) => {
         }
 
         if (!_.find(match.teams[data.team].players, {id: request.id})) {
-            match.teams[data.team].players.push({
-                id: request.id,
-                leader: _.isEmpty(match.teams[data.team].players)
-            });
+            if (removed) {
+                match.teams[data.team].players.push({
+                    id: request.id,
+                    nickname: removed.nickname,
+                    blizzId: removed.blizzId,
+                    charName: removed.charName,
+                    spec: removed.spec,
+                    leader: _.isEmpty(match.teams[data.team].players)
+                });
+            }
+            else {
+                match.teams[data.team].players.push({
+                    id: request.id,
+                    leader: _.isEmpty(match.teams[data.team].players)
+                });
+            }
         }
         return match;
     }).then((response) => {

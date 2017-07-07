@@ -10,18 +10,7 @@ const matchRoom = Vue.component('match-room', {
             <team team="blue"></team>
         </div>
     `,
-    // <span id="number">{{ count }}</span>
-    //         </br>
-    //         </br>
-    //         <button @click="increase()">Plus!</button>
-    //         <button @click="decrease()">Minus!</button>
     methods: {
-        increase: function() {
-            this.$socket.emit('increase')
-        },
-        decrease: function() {
-            this.$socket.emit('decrease')
-        },
         joinRoom: function() {
             this.$socket.emit('join-room', {
                 roomname: this.$route.params.id

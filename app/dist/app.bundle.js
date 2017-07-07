@@ -7488,18 +7488,7 @@
 
 	var matchRoom = Vue.component('match-room', {
 	    template: '\n        <div>\n            <h1>Room: {{ roomName }}</h1>\n            <div id="game-type">Game Type: {{ type }}</div>\n            <div id="bestOf">Best of: {{ bestOf }}</div>\n            <team team="red"></team>\n            <map-select></map-select>\n            <scoreboard></scoreboard>\n            <team team="blue"></team>\n        </div>\n    ',
-	    // <span id="number">{{ count }}</span>
-	    //         </br>
-	    //         </br>
-	    //         <button @click="increase()">Plus!</button>
-	    //         <button @click="decrease()">Minus!</button>
 	    methods: {
-	        increase: function increase() {
-	            this.$socket.emit('increase');
-	        },
-	        decrease: function decrease() {
-	            this.$socket.emit('decrease');
-	        },
 	        joinRoom: function joinRoom() {
 	            this.$socket.emit('join-room', {
 	                roomname: this.$route.params.id
@@ -7555,37 +7544,46 @@
 	            type: Number,
 	            required: true
 	        },
+	        nickname: String,
 	        blizzId: String,
 	        charName: String,
-	        nickname: String,
-	        character: String,
-	        leader: String
+	        spec: String
 	    },
-	    template: '\n        <div>\n            <div v-if="exists && editable">\n                {{ player.id }}\n                <span v-if="player.leader">\n                    L \n                </span>\n                <input type=\'text\' placeholder=\'Nickname\'                    v-bind:nickname=\'nickname\'                    v-on:blur=\'updateNickname($event.target.value)\'></input>\n                <select v-model=\'character\'>\n                    <option selected=\'true\' disabled>Class/Spec</option>\n                    <optgroup label="Death Knight">\n                        <option>Blood</option>\n                        <option>Frost</option>\n                        <option>Unholy</option>\n                    </optgroup>\n                    <optgroup label="Demon Hunter">\n                        <option>Havoc</option>\n                        <option>Vengence</option>\n                    </optgroup>\n                    <optgroup label="Hunter">\n                        <option>Beast Master</option>\n                        <option>Marksmanship</option>\n                        <option>Survival</option>\n                    </optgroup>\n                    <optgroup label="Mage">\n                        <option>Arcane</option>\n                        <option>Fire</option>\n                        <option>Frost</option>\n                    </optgroup>\n                    <optgroup label="Druid">\n                        <option>Balance</option>\n                        <option>Feral</option>\n                        <option>Guardian</option>\n                        <option>Restoration</option>\n                    </optgroup>\n                    <optgroup label="Paladin">\n                        <option>Holy</option>\n                        <option>Retribution</option>\n                        <option>Protection</option>\n                    </optgroup>\n                    <optgroup label="Priest">\n                        <option>Holy</option>\n                        <option>Discipline</option>\n                        <option>Shadow</option>\n                    </optgroup>\n                    <optgroup label="Rogue">\n                        <option>Subtlety</option>\n                        <option>Assassination</option>\n                        <option>Outlaw</option>\n                    </optgroup>\n                    <optgroup label="Shaman">\n                        <option>Restoration</option>\n                        <option>Elemental</option>\n                        <option>Enhancement</option>\n                    </optgroup>\n                    <optgroup label="Warlock">\n                        <option>Destruction</option>\n                        <option>Affliction</option>\n                        <option>Demonology</option>\n                    </optgroup>\n                    <optgroup label="Warrior">\n                        <option>Arms</option>\n                        <option>Protection</option>\n                        <option>Fury</option>\n                    </optgroup>\n                    <optgroup label="Monk">\n                        <option>Mistweaver</option>\n                        <option>Brewmaster</option>\n                        <option>Windwalker</option>\n                    </optgroup>\n                </select>\n                <input type=\'text\' placeholder=\'Blizzard Id\'                    v-bind:blizzId=\'blizzId\'                    v-on:blur=\'updateBlizzId($event.target.value)\'></input>\n                <input type=\'text\' placeholder=\'Character Name\'                    v-bind:charName=\'charName\'                    v-on:blur=\'updateCharName($event.target.value)\'></input>\n\n                <button @click="submit()">Submit</button>\n            </div>\n            <div v-else-if="exists && !editable">\n                {{ player.id }}\n                <span v-if="player.leader">\n                    L \n                </span> \n                <button v-if="isLeader && sameTeam" @click="updateLeader(player.id)">Make Leader</button>\n                {{ player.nickname }}\n                {{ player.blizzId }}\n                {{ player.charName }}\n            </div> \n            <div v-else>\n                empty\n            </div> \n        </div>\n    ',
+	    template: '\n        <div>\n            <div v-if="exists && editable">\n                {{ player.id }}\n                <span v-if="player.leader">\n                    L \n                </span>\n                <input type=\'text\' :value=\'player.nickname\' placeholder=\'Nickname\'                     v-bind:nickname=\'nickname\'                    v-on:blur=\'updateNickname($event.target.value)\'></input>\n                <select :value=\'player.spec\' v-bind:spec=\'spec\' v-on:change=\'updateSpec($event.target.value)\'>\n                    <optgroup label="Death Knight">\n                        <option value=\'dk-blood\'>Blood</option>\n                        <option value=\'dk-frost\'>Frost</option>\n                        <option value=\'dk-unholy\'>Unholy</option>\n                    </optgroup>\n                    <optgroup label="Demon Hunter">\n                        <option value=\'dh-havoc\'>Havoc</option>\n                        <option value=\'dh-vengence\'>Vengence</option>\n                    </optgroup>\n                    <optgroup label="Hunter">\n                        <option value=\'hunter-beastmaster\'>Beast Master</option>\n                        <option value=\'hunter-marksmanship\'>Marksmanship</option>\n                        <option value=\'hunter-survival\'>Survival</option>\n                    </optgroup>\n                    <optgroup label="Mage">\n                        <option value=\'mage-arcane\'>Arcane</option>\n                        <option value=\'mage-fire\'>Fire</option>\n                        <option value=\'mage-frost\'>Frost</option>\n                    </optgroup>\n                    <optgroup label="Druid">\n                        <option value=\'druid-balance\'>Balance</option>\n                        <option value=\'druid-feral\'>Feral</option>\n                        <option value=\'druid-guardian\'>Guardian</option>\n                        <option value=\'druid-restoration\'>Restoration</option>\n                    </optgroup>\n                    <optgroup label="Paladin">\n                        <option value=\'paladin-holy\'>Holy</option>\n                        <option value=\'paladin-retribution\'>Retribution</option>\n                        <option value=\'paladin-protection\'>Protection</option>\n                    </optgroup>\n                    <optgroup label="Priest">\n                        <option value=\'priest-holy\'>Holy</option>\n                        <option value=\'priest-discipline\'>Discipline</option>\n                        <option value=\'priest-shadow\'>Shadow</option>\n                    </optgroup>\n                    <optgroup label="Rogue">\n                        <option value=\'rogue-subtlety\'>Subtlety</option>\n                        <option value=\'rogue-assassination\'>Assassination</option>\n                        <option value=\'rogue-outlaw\'>Outlaw</option>\n                    </optgroup>\n                    <optgroup label="Shaman">\n                        <option value=\'shaman-restoration\'>Restoration</option>\n                        <option value=\'shaman-elemental\'>Elemental</option>\n                        <option value=\'shaman-enhancement\'>Enhancement</option>\n                    </optgroup>\n                    <optgroup label="Warlock">\n                        <option value=\'warlock-destruction\'>Destruction</option>\n                        <option value=\'warlock-afflication\'>Affliction</option>\n                        <option value=\'warlock-demonology\'>Demonology</option>\n                    </optgroup>\n                    <optgroup label="Warrior">\n                        <option value=\'warrior-arms\'>Arms</option>\n                        <option value=\'warrior-protection\'>Protection</option>\n                        <option value=\'warrior-fury\'>Fury</option>\n                    </optgroup>\n                    <optgroup label="Monk">\n                        <option value=\'monk-mistweaver\'>Mistweaver</option>\n                        <option value=\'monk-brewmaster\'>Brewmaster</option>\n                        <option value=\'monk-windwalker\'>Windwalker</option>\n                    </optgroup>\n                </select>\n                <input type=\'text\' :value=\'player.blizzId\' placeholder=\'Blizzard Id\'                    v-bind:blizzId=\'blizzId\'                    v-on:blur=\'updateBlizzId($event.target.value)\'></input>\n                <input type=\'text\' :value=\'player.charName\' placeholder=\'Character Name\'                    v-bind:charName=\'charName\'                    v-on:blur=\'updateCharName($event.target.value)\'></input>\n                <button @click="submit()">Submit</button>\n            </div>\n            <div v-else-if="exists && !editable">\n                {{ player.id }}\n                <span v-if="player.leader">\n                    L \n                </span> \n                <button v-if="isLeader && sameTeam" @click="updateLeader(player.id)">Make Leader</button>\n                {{ player.nickname }}\n                {{ player.spec }}\n                {{ player.blizzId }}\n                {{ player.charName }}\n            </div> \n            <div v-else>\n                empty\n            </div> \n        </div>\n    ',
 	    methods: {
 	        updateNickname: function updateNickname(nickname) {
 	            this.$socket.emit('set-nickname', {
 	                team: this.team,
 	                positon: this.position,
-	                nickname: nickname });
+	                nickname: nickname
+	            });
 	        },
 	        updateBlizzId: function updateBlizzId(blizzId) {
 	            this.$socket.emit('set-blizzId', {
 	                team: this.team,
 	                positon: this.position,
-	                blizzId: blizzId });
+	                blizzId: blizzId
+	            });
 	        },
 	        updateCharName: function updateCharName(charName) {
 	            this.$socket.emit('set-charName', {
 	                team: this.team,
 	                positon: this.position,
-	                charName: charName });
+	                charName: charName
+	            });
 	        },
-	        updateLeader: function updateLeader(id) {
+	        updateLeader: function updateLeader(playerId) {
 	            this.$socket.emit('set-leader', {
 	                team: this.team,
 	                positon: this.position,
 	                playerId: id
+	            });
+	        },
+	        updateSpec: function updateSpec(spec) {
+	            this.$socket.emit('set-spec', {
+	                team: this.team,
+	                positon: this.position,
+	                spec: spec
 	            });
 	        },
 	        submit: function submit() {
