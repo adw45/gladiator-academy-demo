@@ -12,7 +12,7 @@ var nickname = (request, data, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 var blizzId = (request, data, update) => {
     redis.updateMatch(request, (match) => {
@@ -25,7 +25,7 @@ var blizzId = (request, data, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 var charName = (request, data, update) => {
     redis.updateMatch(request, (match) => {
@@ -38,7 +38,7 @@ var charName = (request, data, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 var classSpec = (request, data, update) => {
     redis.updateMatch(request, (match) => {
@@ -49,7 +49,7 @@ var classSpec = (request, data, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 var leader = (request, data, update) => {
     redis.updateMatch(request, (match) => {
@@ -60,7 +60,7 @@ var leader = (request, data, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 module.exports = {
     nickname,
@@ -68,4 +68,4 @@ module.exports = {
     charName,
     classSpec,
     leader
-}
+};

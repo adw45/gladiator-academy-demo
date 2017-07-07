@@ -1,4 +1,5 @@
-const redis = require('../data/redis.js');
+var redis = require('../data/redis.js')
+    _ = require('lodash');
 
 var join = (request, data, update) => {
     redis.getMatch(request).then((response) => {
@@ -11,7 +12,7 @@ var join = (request, data, update) => {
             update(request.matchId, response);
         }
     });
-}
+};
 
 var leave = (request, update) => {
     redis.updateMatch(request, (match) => {
@@ -21,16 +22,16 @@ var leave = (request, update) => {
     }).then(function(response){
         update(request.matchId, response);
     });
-}
+};
 
 var destroy = (request) => {
     redis.deleteMatch(request).then(function() {
         return true;
     });
-}
+};
 
 module.exports = {
     join,
     leave,
     destroy
-}
+};

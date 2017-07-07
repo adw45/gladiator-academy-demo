@@ -1,5 +1,4 @@
 var redis = require('redis'),
-    _ = require('lodash'),
     helpers = require('../helper.js'),
     client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com');
 
@@ -35,6 +34,7 @@ var updateMatch = function(request, transform) {
 var deleteMatch = function(data) {
     return new Promise(function(resolve, reject){
         client.DEL(data.matchId);
+        resolve();
     });
 };
 
