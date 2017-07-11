@@ -1,6 +1,6 @@
-import scoreboard from './modules/scoreboard.js';
-import mapSelect from './modules/map-select.js';
-import playerSelect from './modules/player-select.js';
+import scoreboard from './components/scoreboard/scoreboard.store';
+import mapSelect from './components/map-select/map-select.store';
+import playerSelect from './components/player-select/player-select.store';
 
 // https://www.youtube.com/watch?v=2CSr2vBApSI&index=1&list=PL55RiY5tL51pT0DNJraU93FhMzhXxtDAo
 const store = new Vuex.Store({

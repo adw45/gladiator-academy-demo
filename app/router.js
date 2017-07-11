@@ -1,14 +1,17 @@
-import startRoom from './components/start-room.js';
-import matchRoom from './components/match-room.js';
-import playerSelect from './components/player-select.js';
-import mapSelect from './components/map-select';
-import scoreboard from './components/scoreboard';
-import team from './components/team';
+var start = require('./components/start/start.vue'),
+    match = require('./components/match/match.vue');
+
+Vue.component('start', start);
+Vue.component('match', match);
+Vue.component('map-select', require('./components/map-select/map-select.vue'));
+Vue.component('player-select', require('./components/player-select/player-select.vue'));
+Vue.component('scoreboard', require('./components/scoreboard/scoreboard.vue'))
+Vue.component('team', require('./components/team/team.vue'));
 
 const router = new VueRouter({
     routes:[
-        { path: '/', component: startRoom, props: { title: "Gladiator Academy" } } ,
-        { name: 'room', path: '/room/:id', component: matchRoom }
+        { path: '/', component: start, props: { title: "Gladiator Academy" } } ,
+        { name: 'room', path: '/room/:id', component: match }
     ]
 });
 

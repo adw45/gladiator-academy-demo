@@ -5,6 +5,7 @@ var join = (request, data, update) => {
     redis.updateMatch(request, (match) => {
         if (match.teams[data.team].players.size >= 4) {
             console.log(request, data, 'Room full');
+            return match;
         }
     
         var removed = _.remove(match.teams[data.team === 'red' ? 'blue' : 'red'].players, {id: request.id})[0];
