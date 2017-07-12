@@ -17,17 +17,20 @@ var join = (request, data, update) => {
 
 var leave = (request, update) => {
     redis.updateMatch(request, (match) => {
+        if (!match) {
+            return;
+        }
         var removed = _.remove(match.teams.red.players, {id: request.id})[0];
         if (removed && removed.leader 
             && !_.isEmpty(match.teams.red.players)
-        ){
+        ) {
             match.teams.red.players[0].leader = true;
         }
 
         removed = _.remove(match.teams.blue.players, {id: request.id})[0];
         if (removed && removed.leader 
             && !_.isEmpty(match.teams.blue.players)
-        ){
+        ) {
             match.teams.blue.players[0].leader = true;
         }
         return match;

@@ -1,4 +1,6 @@
-var redis = require('../data/redis.js'),
+var redis = require('../data/redis'),
+    helper = require('../helper'),
+    phaseController = require('./phase-controller'),
     _ = require('lodash');
 
 var join = (request, data, update) => {
@@ -39,7 +41,6 @@ var join = (request, data, update) => {
     });
 };
 
-
 var leave = (request, data, update) => {
     redis.updateMatch(request, (match) => {
         var removed = _.remove(match.teams[data.team].players, {id: request.id})[0];
@@ -55,7 +56,28 @@ var leave = (request, data, update) => {
     });
 };
 
+var ready = (request, data, update) => {
+    redis.updateMatch(request, (match) => {
+        match.phase.ready[data.team] = true;
+        match.phase = phaseController(match.phase);
+        return match;
+    }).then((response) => {
+        update(request.matchId, response);
+    });
+};
+
+var unready = (request, data, update) => {
+    redis.updateMatch(request, (match) => {
+        match.phase.ready[data.team] = false;
+        return match;
+    }).then((response) => {
+        update(request.matchId, response);
+    });
+};
+
 module.exports = {
     join,
-    leave
+    leave,
+    ready,
+    unready
 };

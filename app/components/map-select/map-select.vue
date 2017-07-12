@@ -1,14 +1,11 @@
-// http://jsfiddle.net/La8wQ/10/
-
 <template>
-    <div>
+    <div class="map-selector map-block">
         <template v-for='map in maps'>
-            <input type='radio' name='map'>
-                <img v-bind:src='map.imageUrl' width='100' heigh='70'>
-                {{ map.name }}
-            </input>
+            <input v-if='!map.winner' type='radio' name='map' :id='map.name' :class='map.name' :value='map.name'>
+            <label class='drinkcard-map' :class='[map.name, map.winner]' :for='map.name'></label>
         </template>
     </div>
 </template>
 
 <script src='./map-select.js'></script> 
+<style src='./map-select.css'></style>

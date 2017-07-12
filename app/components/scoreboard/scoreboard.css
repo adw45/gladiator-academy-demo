@@ -1,0 +1,14 @@
+.scoreboard-block {
+    display: block;
+    text-align: center;
+}
+
+.red-score {
+    color: red;
+    float: left;
+}
+
+.blue-score {
+    color: blue;
+    float: right;
+}

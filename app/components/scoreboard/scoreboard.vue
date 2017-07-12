@@ -1,19 +1,19 @@
 <template>
-    <div>
-        <div id="red-score">
-            <span>Team1</span>
+    <div class='scoreboard-block'>
+        <div class="red-score score">
             <span>{{ redScore }}</span>
         </div>
-        
-        <div id="timer">
-            <span>Timer</span>
-        </div>
-
-        <div id="blue-score">
-            <span>Team2</span>
+        <div class="blue-score score">
             <span>{{ blueScore }}</span>
+        </div>
+        <div v-if='phase.type === "form-team"'>
+            Waiting for teams to form
+        </div>
+        <div v-if='phase.type === "blind-pick"'>
+            Blind Pick
         </div>
     </div>
 </template>
 
 <script src='./scoreboard.js'></script>
+<style src='./scoreboard.css'></style>

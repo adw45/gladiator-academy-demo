@@ -1,0 +1,8 @@
+.player-block {
+    height: 100px;
+    background-color: grey;
+    border-style: solid;
+    border-width: 1px;
+    margin: 5px;
+    padding: 3px;
+}

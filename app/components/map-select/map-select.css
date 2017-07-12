@@ -1,0 +1,78 @@
+.map-block {
+    display: inline-block;
+    text-align: center;
+}
+
+.nagrand {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/nagrand-1-thumbnail.jpg);
+}
+.blades-edge {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/blades-edge-1-thumbnail.jpg);
+}
+.dalaran {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/dalaran-sewers-1-thumbnail.jpg);
+}
+.tiger-peak {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/tigers-peak-1-thumbnail.jpg);
+}
+.tolvaran {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/tolviron-1-thumbnail.jpg);
+}
+.ruins {
+    background-image:url(http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/ruins-of-lordaeron-1-thumbnail.jpg);
+}
+.ashmanes {
+    background-image:url(https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/X0PT9PL393QL1450220664361.png);
+}
+.black-rook { 
+    background-image:url(https://bnetcmsus-a.akamaihd.net/cms/content_folder_media/39PHO71FYECI1450220664340.png);
+}
+
+.map-selector input {
+    margin:0;padding:0;
+    -webkit-appearance:none;
+       -moz-appearance:none;
+            appearance:none;
+}
+
+.map-selector input:active +.drinkcard-map { opacity: .9; }
+.map-selector input:checked +.drinkcard-map {
+    -webkit-filter: none;
+       -moz-filter: none;
+            filter: none;
+}
+
+.drinkcard-map {
+    cursor:pointer;
+    background-size:contain;
+    background-repeat:no-repeat;
+    display:inline-block;
+    width:150px;height:100px;
+    -webkit-transition: all 100ms ease-in;
+       -moz-transition: all 100ms ease-in;
+            transition: all 100ms ease-in;
+    -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+       -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+            filter: brightness(1.8) grayscale(1) opacity(.7);
+}
+.drinkcard-map:hover {
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.red {
+    background-color: red;
+    background-blend-mode: screen;
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}
+
+.blue {
+    background-color: blue;
+    background-blend-mode: screen;
+    -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+       -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+            filter: brightness(1.2) grayscale(.5) opacity(.9);
+}

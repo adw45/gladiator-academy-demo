@@ -25,12 +25,20 @@ var socketio = function(server) {
             matchController.join({matchId: socket.matchId}, data, update);
         });
 
-        socket.on('join-team', function(data) {
+        socket.on('team-join', function(data) {
             teamController.join({id: socket.id, matchId: socket.matchId}, data, update);
         });
         
-        socket.on('leave-team', function(data) {
+        socket.on('team-leave', function(data) {
             teamController.leave({id: socket.id, matchId: socket.matchId}, data, update);
+        });
+
+        socket.on('team-ready', function(data) {
+            teamController.ready({id: socket.id, matchId: socket.matchId}, data, update);
+        });
+
+        socket.on('team-unready', function(data) {
+            teamController.unready({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('set-nickname', function(data) {

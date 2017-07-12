@@ -8,6 +8,9 @@ export default {
         },
         blueScore() {
             return this.$store.state.scoreboard.blueScore;
+        },
+        phase() {
+            return this.$store.state.phase;
         }
     }
 }

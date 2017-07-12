@@ -1,4 +1,4 @@
-function initializeRoom() {
+var initializeRoom = function() {
     return {
         type: 'standard',
         bestOf: 3,
@@ -12,57 +12,71 @@ function initializeRoom() {
                 players: []
             }
         },
+        phase: {
+            type: 'form-team',
+            ready: {
+                red: false,
+                blue: false
+            }
+        },
         maps: [
             {
-                name: 'Nagrand Arena',
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/nagrand-1-thumbnail.jpg',
+                name: 'nagrand',
+                displayName: 'Nagrand Arena',
                 winner: null,
                 selected: true
             },
             {
-                name: 'Blade\'s Edge Arena',
-                winner: null,
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/blades-edge-1-thumbnail.jpg',
-                selected: false
-            },
-            {
-                name: 'Dalaran Sewers',
-                winner: null,
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/dalaran-sewers-1-thumbnail.jpg',
-                selected: false
-            },
-            {
-                name: 'Tigers Peak',
-                winner: null,
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/tigers-peak-1-thumbnail.jpg',
-                selected: false
-            },
-            {
-                name: 'Tol\'varan Arena',
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/tolviron-1-thumbnail.jpg',
+                name: 'blades-edge',
+                displayName: 'Blade\'s Edge Arena',
                 winner: null,
                 selected: false
             },
             {
-                name: 'Ruins of Lordaeron',
-                imageUrl: 'http://media.blizzard.com/wow/media/screenshots/pvp/guide/arenas/ruins-of-lordaeron-1-thumbnail.jpg',
+                name: 'dalaran',
+                displayName: 'Dalaran Sewers',
                 winner: null,
                 selected: false
             },
             {
-                name: 'Ashmane\'s Fall',
+                name: 'tiger-peak',
+                displayName: 'Tigers Peak',
                 winner: null,
                 selected: false
             },
             {
-                name: 'Black Rook Hold',
+                name: 'tolvaran',
+                displayName: 'Tol\'varan Arena',
+                winner: null,
+                selected: false
+            },
+            {
+                name: 'ruins',
+                displayName: 'Ruins of Lordaeron',
+                winner: null,
+                selected: false
+            },
+            {
+                name: 'ashmanes',
+                displayName: 'Ashmane\'s Fall',
+                winner: null,
+                selected: false
+            },
+            {
+                name: 'black-rook',
+                displayName: 'Black Rook Hold',
                 winner: null,
                 selected: false
             }
         ]
     }
-}
+};
+
+var bothTeamsReady = function(ready) {
+    return ready.red && ready.blue; 
+};
 
 module.exports = {
-    initializeRoom
+    initializeRoom,
+    bothTeamsReady
 };

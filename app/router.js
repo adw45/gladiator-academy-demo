@@ -7,6 +7,7 @@ Vue.component('map-select', require('./components/map-select/map-select.vue'));
 Vue.component('player-select', require('./components/player-select/player-select.vue'));
 Vue.component('scoreboard', require('./components/scoreboard/scoreboard.vue'))
 Vue.component('team', require('./components/team/team.vue'));
+//Vue.component('chat', require('./components/chat/chat.vue'));
 
 const router = new VueRouter({
     routes:[

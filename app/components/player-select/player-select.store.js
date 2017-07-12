@@ -1,14 +1,10 @@
 const playerSelect = {
     state: {
-        teams: {},
-        id: String
+        teams: {}
     },
     mutations: {
         update: (state, data) => {
             state.teams = data.teams;
-        },
-        connected: (state, data) => {
-            state.id = data.id
         }
     }
 }
