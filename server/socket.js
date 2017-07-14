@@ -1,7 +1,7 @@
 var io = require('socket.io'),
-    matchController = require('../controllers/match-controller.js'),
-    playerController = require('../controllers/player-controller.js'),
-    teamController = require('../controllers/team-controller.js');
+    matchController = require('./controllers/match-controller.js'),
+    playerController = require('./controllers/player-controller.js'),
+    teamController = require('./controllers/team-controller.js');
     
 var socketio = function(server) {
     io = io(server);
@@ -13,7 +13,7 @@ var socketio = function(server) {
             socket.leave(socket.matchId);
             if (!io.sockets.adapter.rooms[socket.matchId]) {
                 matchController.destroy({matchId: socket.matchId});
-            }   
+            }
         });
 
         socket.on('join-room', function(data) {
@@ -41,23 +41,23 @@ var socketio = function(server) {
             teamController.unready({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('set-nickname', function(data) {
+        socket.on('player-nickname', function(data) {
             playerController.nickname({id: socket.id, matchId: socket.matchId}, data, update);
         });
         
-        socket.on('set-blizzId', function(data) {
+        socket.on('player-blizzId', function(data) {
             playerController.blizzId({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('set-charName', function(data) {
+        socket.on('player-charName', function(data) {
             playerController.charName({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('set-spec', function(data){
+        socket.on('player-spec', function(data){
             playerController.spec({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('set-leader', function(data){
+        socket.on('player-leader', function(data){
             playerController.leader({id: socket.id, matchId: socket.matchId}, data, update);
         });
 

@@ -1,6 +1,6 @@
 var express = require('express'),
     server = require('http'),
-    io = require('./socket/socket.js'),
+    io = require('./socket.js'),
     routes = require('./router.js')
     _ = require('lodash'),
     app = express(),

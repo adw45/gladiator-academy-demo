@@ -8,8 +8,13 @@ export default {
     methods: {
         joinTeam() {
             this.$socket.emit('team-join', {
-                team: this.team, 
-            })
+                team: this.team 
+            });
+        },
+        leaveTeam() {
+            this.$socket.emit('team-leave', {
+                team: this.team
+            });
         },
         ready() {
             this.$socket.emit('team-ready', {
@@ -40,6 +45,9 @@ export default {
         },
         onTeam() {
             return _.find(this.$store.state.team[this.team].players, {id: this.$store.state.id});
+        },
+        isFull() {
+            return this.$store.state.team[this.team].players.length >= 4;
         }
     }
-}
+};

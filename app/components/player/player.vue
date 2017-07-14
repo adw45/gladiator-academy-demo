@@ -102,5 +102,5 @@
     </div>
 </template>
 
-<script src='./player-select.js'></script>
+<script src='./player.js'></script>
 <style src='./player.css'></style>
