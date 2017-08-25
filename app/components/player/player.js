@@ -17,35 +17,35 @@ export default {
     },
     methods: {
         updateNickname(nickname) {
-            this.$socket.emit('set-nickname', { 
+            this.$socket.emit('player-nickname', { 
                 team: this.team, 
                 positon: this.position, 
                 nickname: nickname 
             });
         },
         updateBlizzId(blizzId) {
-            this.$socket.emit('set-blizzId', { 
+            this.$socket.emit('player-blizzId', { 
                 team: this.team, 
                 positon: this.position, 
                 blizzId: blizzId 
             });
         },
         updateCharName(charName) {
-            this.$socket.emit('set-charName', { 
+            this.$socket.emit('player-charName', { 
                 team: this.team, 
                 positon: this.position, 
                 charName: charName 
             });
         },
         updateLeader(playerId) {
-            this.$socket.emit('set-leader', { 
+            this.$socket.emit('player-leader', { 
                 team: this.team, 
                 positon: this.position,
                 playerId: playerId
             });
         },
         updateSpec(spec){
-            this.$socket.emit('set-spec', { 
+            this.$socket.emit('player-spec', { 
                 team: this.team, 
                 positon: this.position,
                 spec: spec
