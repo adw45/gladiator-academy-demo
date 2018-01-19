@@ -1,6 +1,30 @@
+## Setup
+Local Install:
+
+```bash
+brew install redis
+npm install
+```
+
+Startup:
+```bash
+redis-server & # only needs to be executed once
+npm start
+```
+
+Stop Redis:
+```bash
+pkill redis-server
+```
+
+Clear Redis Cached data:
+```
+redis-cli flushall
+```
+
 ## Datamodel
 
-Working on a datamodel that can represent all the info necessary. This is going to be from a backend point of view. Some information I'm puting here shouldn't be shared with the browser. (Opposing team picks, players internal IDs, etc etc.) 
+Working on a datamodel that can represent all the info necessary. This is going to be from a backend point of view. Some information I'm puting here shouldn't be shared with the browser. (Opposing team picks, players internal IDs, etc etc.)
 ```javascript
 {
     match: {
@@ -32,7 +56,7 @@ Working on a datamodel that can represent all the info necessary. This is going 
                 name: 'Nagrand Arena',
                 played: true,
                 winner: 'red-team'
-            }, 
+            },
             {
                 name: 'Blade\'s Edge Arena',
                 played: false,
@@ -54,7 +78,7 @@ Working on a datamodel that can represent all the info necessary. This is going 
                 },
                 // ...
             ]
-        }, 
+        },
         'blue-team': {
             // ...
         }

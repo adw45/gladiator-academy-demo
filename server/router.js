@@ -1,10 +1,10 @@
-var express = require('express');
-var playerRouter = require('./routes/player')
-var router = express.Router();
+const express = require('express'),
+    playerRouter = require('./routes/player'),
+    router = express.Router();
 
 router.use('/player', playerRouter);
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
     res.status(200).send("API is accessible");
 });
 
