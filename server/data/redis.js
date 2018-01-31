@@ -1,34 +1,21 @@
-const redis = require('redis'),
-    helpers = require('../helper.js');
-
 let client;
 
-if (process.env.NODE_ENV === 'production'){
-    client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com');
-    client.auth('jXniWNrk4sQ2DGo8', function(err) {
-        if (err) throw err;
-    });
-}
-else {
-    client = redis.createClient();
-}
-
 let getMatch = (request) => {
-        return new Promise(function(resolve, reject){
-            client.get(request.matchId, function(err, match){
-                resolve(JSON.parse(match));
+        return new Promise((resolve, reject) => {
+            client.get(request.matchId, (err, match) => {
+                return resolve(JSON.parse(match));
             });
         })
     },
-    createMatch = (request) => {
-        return new Promise(function(resolve, reject){
-            client.set(request.matchId, JSON.stringify(helpers.initializeRoom()));
+    createMatch = (request, data) => {
+        return new Promise((resolve, reject) => {
+            client.set(request.matchId, JSON.stringify(data));
             resolve(getMatch(request));
         });
     },
     updateMatch = (request, transform) => {
-        return new Promise(function(resolve, reject) {
-            client.get(request.matchId, function(err, match) {
+        return new Promise((resolve, reject) => {
+            client.get(request.matchId, (err, match) => {
                 match = transform(JSON.parse(match));
                 client.set(request.matchId, JSON.stringify(match));
                 resolve(match);
@@ -36,15 +23,25 @@ let getMatch = (request) => {
         });
     },
     deleteMatch = (data) => {
-        return new Promise(function(resolve, reject){
+        return new Promise((resolve, reject) => {
             client.DEL(data.matchId);
             resolve();
         });
     };
 
-module.exports = {
-    getMatch,
-    createMatch,
-    updateMatch,
-    deleteMatch
+module.exports = (redis) => {
+    if (process.env.NODE_ENV === 'production'){
+        client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com');
+        client.auth('jXniWNrk4sQ2DGo8', (err) => { if (err) throw err; });
+    }
+    else {
+        client = redis.createClient();
+    }
+
+    return {
+        getMatch,
+        createMatch,
+        updateMatch,
+        deleteMatch
+    };
 };

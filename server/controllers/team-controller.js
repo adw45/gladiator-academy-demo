@@ -1,17 +1,16 @@
-var redis = require('../data/redis'),
-    helper = require('../helper'),
+const helper = require('../helper'),
     phaseController = require('./phase-controller'),
     _ = require('lodash');
 
-var join = (request, data, update) => {
+const join = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         if (match.teams[data.team].players.size >= 4) {
             console.log(request, data, 'Room full');
             return match;
         }
-    
-        var removed = _.remove(match.teams[data.team === 'red' ? 'blue' : 'red'].players, {id: request.id})[0];
-        if (removed && removed.leader 
+
+        let removed = _.remove(match.teams[data.team === 'red' ? 'blue' : 'red'].players, {id: request.id})[0];
+        if (removed && removed.leader
             && !_.isEmpty(match.teams[data.team === 'red' ? 'blue' : 'red'].players)
         ){
             match.teams[data.team === 'red' ? 'blue' : 'red'].players[0].leader = true
@@ -41,11 +40,11 @@ var join = (request, data, update) => {
     });
 };
 
-var leave = (request, data, update) => {
+const leave = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var removed = _.remove(match.teams[data.team].players, {id: request.id})[0];
-        if (removed 
-            && removed.leader 
+        if (removed
+            && removed.leader
             && !_.isEmpty(match.teams[data.team].players)
         ){
             match.teams[data.team].players[0].leader = true
@@ -56,7 +55,7 @@ var leave = (request, data, update) => {
     });
 };
 
-var ready = (request, data, update) => {
+const ready = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         match.phase.ready[data.team] = true;
         match.phase = phaseController(match.phase);
@@ -66,7 +65,7 @@ var ready = (request, data, update) => {
     });
 };
 
-var unready = (request, data, update) => {
+const unready = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         match.phase.ready[data.team] = false;
         return match;
@@ -75,9 +74,11 @@ var unready = (request, data, update) => {
     });
 };
 
-module.exports = {
-    join,
-    leave,
-    ready,
-    unready
+module.exports = (redis) => {
+    return {
+        join: (request, data, update) => join(redis, request, data, update),
+        leave: (request, data, update) => leave(redis, request, data, update),
+        ready: (request, data, update) => ready(redis, request, data, update),
+        unready: (request, data, update) => unready(redis, request, data, update)
+    }
 };

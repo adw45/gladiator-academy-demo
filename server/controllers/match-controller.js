@@ -1,22 +1,25 @@
-var redis = require('../data/redis.js')
-    _ = require('lodash'),
-    teamController = require('./team-controller.js');
+const _ = require('lodash'),
+    helpers = require('../helper');
 
-var join = (request, data, update) => {
-    redis.getMatch(request).then((match) => {
+const join = (redis, request, update) => {
+    return new Promise(async (resolve, reject) => {
+        let match = await redis.getMatch(request);
         if (!match) {
-            redis.createMatch(request).then((match) => {
-                update(request.matchId, match);
-            });
+            let result = await redis.createMatch(request, helpers.initializeRoom());
+            return resolve(update(request.matchId, result));
         }
-        else{
-            update(request.matchId, match);
+        else {
+            let result = await redis.updateMatch(request, match => {
+                match.size += 1
+                return match
+            });
+            return resolve(update(request.matchId, result));
         }
     });
 };
 
-var leave = (request, update) => {
-    redis.updateMatch(request, (match) => {
+const leave = async (redis, request, update) => {
+    let match = await redis.updateMatch(request, (match) => {
         if (!match) {
             return;
         }
@@ -34,19 +37,19 @@ var leave = (request, update) => {
             match.teams.blue.players[0].leader = true;
         }
         return match;
-    }).then((response) => {
-        update(request.matchId, response);
-    });
+    })
+    return update(request.matchId, match);
 };
 
-var destroy = (request) => {
-    redis.deleteMatch(request).then(function() {
-        return true;
-    });
+const destroy = async (redis, request) => {
+    await redis.deleteMatch(request);
+    return true;
 };
 
-module.exports = {
-    join,
-    leave,
-    destroy
+module.exports = (redis) => {
+    return {
+        join: (request, update) => join(redis, request, update),
+        leave: (request, update) => leave(redis, request, update),
+        destroy: (request) => destroy(redis, request)
+    }
 };

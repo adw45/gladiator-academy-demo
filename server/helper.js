@@ -1,6 +1,7 @@
 let initializeRoom = () => {
         return {
             type: 'standard',
+            size: 1,
             bestOf: 3,
             redScore: 0,
             blueScore: 0,

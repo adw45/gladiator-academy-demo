@@ -1,7 +1,6 @@
-var redis = require('../data/redis.js'),
-    _  = require('lodash');
+const _  = require('lodash');
 
-var nickname = (request, data, update) => {
+const nickname = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
         player.nickname = data.nickname;
@@ -11,7 +10,7 @@ var nickname = (request, data, update) => {
     });
 };
 
-var blizzId = (request, data, update) => {
+const blizzId = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
         player.blizzId = data.blizzId
@@ -21,7 +20,7 @@ var blizzId = (request, data, update) => {
     });
 };
 
-var charName = (request, data, update) => {
+const charName = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
         player.charName = data.charName
@@ -31,7 +30,7 @@ var charName = (request, data, update) => {
     });
 };
 
-var spec = (request, data, update) => {
+const spec = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
         player.spec = data.spec;
@@ -41,7 +40,7 @@ var spec = (request, data, update) => {
     });
 };
 
-var leader = (request, data, update) => {
+const leader = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         var player = _.find(match.teams[data.team].players, {id: request.id});
         if(player.leader) {
@@ -55,10 +54,12 @@ var leader = (request, data, update) => {
     });
 };
 
-module.exports = {
-    nickname,
-    blizzId,
-    charName,
-    spec,
-    leader
+module.exports = (redis) =>  {
+    return {
+        nickname: (request, data, update) => nickname(redis, request, data, update),
+        blizzId: (request, data, update) => blizzId(redis, request, data, update),
+        charName: (request, data, update) => charName(redis, request, data, update),
+        spec: (request, data, update) => spec(redis, request, data, update),
+        leader: (request, data, update) => leader(redis, request, data, update)
+    }
 };

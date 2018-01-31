@@ -1,15 +1,17 @@
-const io = require('socket.io'),
-    matchController = require('./controllers/match-controller.js'),
-    playerController = require('./controllers/player-controller.js'),
-    teamController = require('./controllers/team-controller.js');
+let io = require('socket.io');
 
-let socketio = (server) => {
+let socketio = (server, matchController, playerController, teamController) => {
     io = io(server);
+
+    const update = (matchId, data) => {
+        io.in(matchId).emit('update', data);
+    };
+
     io.on('connection', (socket) => {
         socket.emit('connected', { id: socket.id })
 
         socket.on('disconnect', () => {
-            matchController.leave({id: socket.id, matchId: socket.matchId}, update)
+            matchController.leave({id: socket.id, matchId: socket.matchId}, update);
             socket.leave(socket.matchId);
             if (!io.sockets.adapter.rooms[socket.matchId]) {
                 matchController.destroy({matchId: socket.matchId});
@@ -22,7 +24,7 @@ let socketio = (server) => {
             }
             socket.join(data.roomname);
             socket.matchId = data.roomname;
-            matchController.join({matchId: socket.matchId}, data, update);
+            matchController.join({matchId: socket.matchId}, update);
         });
 
         socket.on('team-join', (data) => {
@@ -60,10 +62,6 @@ let socketio = (server) => {
         socket.on('player-leader', (data) => {
             playerController.leader({id: socket.id, matchId: socket.matchId}, data, update);
         });
-
-        var update = (matchId, data) => {
-            io.in(matchId).emit('update', data);
-        };
     });
 };
 
