@@ -1,21 +1,21 @@
 const _ = require('lodash'),
     helpers = require('../helper');
 
-const join = (redis, request, update) => {
-    return new Promise(async (resolve, reject) => {
-        let match = await redis.getMatch(request);
-        if (!match) {
-            let result = await redis.createMatch(request, helpers.initializeRoom());
-            return resolve(update(request.matchId, result));
-        }
-        else {
-            let result = await redis.updateMatch(request, match => {
-                match.size += 1
-                return match
-            });
-            return resolve(update(request.matchId, result));
-        }
-    });
+const join = async (redis, request, update) => {
+    let match = await redis.getMatch(request),
+        result;
+
+    if (!match) {
+        result = await redis.createMatch(request, helpers.initializeRoom());
+    }
+    else {
+        result = await redis.updateMatch(request, match => {
+            match.size += 1
+            return match
+        });
+    }
+
+    return update(request.matchId, result);
 };
 
 const leave = async (redis, request, update) => {

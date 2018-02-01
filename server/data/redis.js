@@ -1,6 +1,6 @@
 let client;
 
-let getMatch = (request) => {
+const getMatch = (request) => {
         return new Promise((resolve, reject) => {
             client.get(request.matchId, (err, match) => {
                 return resolve(JSON.parse(match));
@@ -8,9 +8,9 @@ let getMatch = (request) => {
         })
     },
     createMatch = (request, data) => {
-        return new Promise((resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             client.set(request.matchId, JSON.stringify(data));
-            resolve(getMatch(request));
+            resolve(await getMatch(request));
         });
     },
     updateMatch = (request, transform) => {

@@ -22,7 +22,7 @@ describe('match-controller', () => {
 
     it('match-controller - join an existing channel', async () => {
         await matchController.join({matchId: '123'}, update);
-        const response = await matchController.join({matchId: '123'}, update);
+        let response = await matchController.join({matchId: '123'}, update);
 
         expect(response).to.deep.equal({
             data: _.merge(helpers.initializeRoom(), {size: 2}),
