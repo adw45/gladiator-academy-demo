@@ -36,6 +36,9 @@ const leave = async (redis, request, update) => {
         ) {
             match.teams.blue.players[0].leader = true;
         }
+        if (match.size > 0) {
+            match.size--;
+        }
         return match;
     })
     return update(request.matchId, match);

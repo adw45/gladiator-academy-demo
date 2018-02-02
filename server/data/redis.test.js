@@ -11,12 +11,12 @@ describe('redis', () => {
         redisMock.createClient().flushall();
     });
 
-    it('redis - create -  new match', async () => {
+    it('create -  new match', async () => {
         let result = await redis.createMatch({matchId: '1234'}, helper.initializeRoom());
         expect(await redis.getMatch({matchId: '1234'})).to.deep.equal(helper.initializeRoom())
     });
 
-    it.skip('redis - create - an already existing match', async () => {
+    it.skip('create - an already existing match', async () => {
         try {
             await redis.createMatch({matchId: '123'}, helper.initializeRoom());
             assert.fail(null, null,'this should throw an error when trying to create an identical room');
@@ -26,12 +26,12 @@ describe('redis', () => {
         }
     });
 
-    it('redis - get - a match', async () => {
+    it('get - a match', async () => {
         let result = await redis.getMatch({matchId: '123'});
         expect(result).to.deep.equal(helper.initializeRoom());
     });
 
-    it.skip('redis - get - a non-existing match', async () => {
+    it.skip('get - a non-existing match', async () => {
         // consider what is the optimal response here
         try {
             await redis.getMatch({matchId: '1234'});
@@ -42,7 +42,7 @@ describe('redis', () => {
         }
     });
 
-    it('redis - update - a match', async () => {
+    it('update - a match', async () => {
         let result = await redis.updateMatch({matchId: '123'}, (match) => {
             match.size += 1;
             return match;
@@ -50,7 +50,7 @@ describe('redis', () => {
         expect(result).to.deep.equal(_.merge(helper.initializeRoom(), {size: 2}))
     });
 
-    it.skip('redis - update - a non-exiting match', async () => {
+    it.skip('update - a non-exiting match', async () => {
         let result = await redis.updateMatch({matchId: '1234'}, (match) => {
             match.size += 1;
             return match;
@@ -63,7 +63,8 @@ describe('redis', () => {
         expect(await redis.getMatch({matchId: '123'})).to.equal(null);
     });
 
-    it.skip('redis - delete - a non-existant match', async () => {
-
+    it.skip('delete - a non-existant match', async () => {
+        let result = await redis.deleteMatch({matchId: '124'});
+        expect(true).to.equal(false);
     })
 });
