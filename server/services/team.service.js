@@ -1,5 +1,5 @@
 const helper = require('../helper'),
-    phaseController = require('./phase-controller'),
+    phaseService = require('./phase.service'),
     _ = require('lodash');
 
 const join = (redis, request, data, update) => {
@@ -58,7 +58,7 @@ const leave = (redis, request, data, update) => {
 const ready = (redis, request, data, update) => {
     redis.updateMatch(request, (match) => {
         match.phase.ready[data.team] = true;
-        match.phase = phaseController(match.phase);
+        match.phase = matchService(match.phase);
         return match;
     }).then((response) => {
         update(request.matchId, response);

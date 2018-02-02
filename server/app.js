@@ -1,8 +1,8 @@
 let redisService = require('redis'),
     redis = require('./data/redis')(redisService),
-    matchController = require('./controllers/match-controller')(redis),
-    playerController = require('./controllers/player-controller')(redis),
-    teamController = require('./controllers/team-controller')(redis),
+    matchService = require('./services/match.service')(redis),
+    playerService = require('./services/player.service')(redis),
+    teamService = require('./services/team.service')(redis),
     express= require('express'),
     app = express(),
     server = require('http').Server(app);
@@ -10,7 +10,7 @@ let redisService = require('redis'),
     routes = require('./router')
     _ = require('lodash');
 
-io(server, matchController, playerController, teamController);
+io(server, matchService, playerService, teamService);
 
 app.use(express.static('./app'));
 app.use('/_api', routes);
