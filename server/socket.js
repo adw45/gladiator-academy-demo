@@ -1,11 +1,14 @@
 let io = require('socket.io');
 
-let socketio = (server, matchService, playerService, teamService) => {
+const socketio = (server, services) => {
     io = io(server);
 
-    const update = (matchId, data) => {
-        io.in(matchId).emit('update', data);
-    };
+    let matchService = services.matchService,
+        teamService = services.teamService,
+        playerService = services.playerService,
+        update = (matchId, data) => {
+            io.in(matchId).emit('update', data);
+        };
 
     io.on('connection', (socket) => {
         socket.emit('connected', { id: socket.id })
