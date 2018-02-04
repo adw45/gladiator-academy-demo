@@ -1,4 +1,5 @@
-const teamController = require('./team.controller'),
+const _ = require('lodash'),
+    teamController = require('./team.controller'),
     mapController = require('./map.controller'),
     phaseController = require('./phase.controller');
 
@@ -25,25 +26,13 @@ const leaveMatch = (match, request) => {
             return;
         }
 
-        removePlayerFromTeam(match.teams.red, request.id);
-        removePlayerFromTeam(match.teams.blue, request.id);
+        match.teams = teamController.removePlayerFromTeams(_.cloneDeep(match.teams), request.id);
 
         if (match.size > 0) {
             match.size--;
         }
 
         return match;
-}
-
-// Should this be moved to team controller? Probably.
-function removePlayerFromTeam(team, id) {
-    let removed = _.remove(team.players, {id})[0];
-
-    if (removed && removed.leader
-        && !_.isEmpty(team.players)
-    ) {
-        team.players[0].leader = true;
-    }
 }
 
 module.exports = {

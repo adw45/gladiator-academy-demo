@@ -9,13 +9,13 @@ const join = async (redis, request, update) => {
     if (!match) {
         result = await redis.createMatch(request, matchController.createMatch());
     } else {
-        result = await redis.updateMatch(request, matchController.joinExistingMatch);
+        result = await redis.updateMatch(request, (match) => matchController.joinExistingMatch(_.cloneDeep(match)));
     }
     return update(request.matchId, result);
 };
 
 const leave = async (redis, request, update) => {
-    let match = await redis.updateMatch(request, (match) => matchController.leaveMatch(match, request));
+    let match = await redis.updateMatch(request, (match) => matchController.leaveMatch(_.cloneDeep(match), request));
     return update(request.matchId, match);
 };
 

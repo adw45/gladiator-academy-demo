@@ -1,58 +1,22 @@
 const helper = require('../helper'),
+    teamController = require('../controllers/team.controller'),
     phaseService = require('./phase.service'),
     _ = require('lodash');
 
-const join = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        if (match.teams[data.team].players.size >= 4) {
-            console.log(request, data, 'Room full');
-            return match;
-        }
-
-        let removed = _.remove(match.teams[data.team === 'red' ? 'blue' : 'red'].players, {id: request.id})[0];
-        if (removed && removed.leader
-            && !_.isEmpty(match.teams[data.team === 'red' ? 'blue' : 'red'].players)
-        ){
-            match.teams[data.team === 'red' ? 'blue' : 'red'].players[0].leader = true
-        }
-
-        if (!_.find(match.teams[data.team].players, {id: request.id})) {
-            if (removed) {
-                match.teams[data.team].players.push({
-                    id: request.id,
-                    nickname: removed.nickname,
-                    blizzId: removed.blizzId,
-                    charName: removed.charName,
-                    spec: removed.spec,
-                    leader: _.isEmpty(match.teams[data.team].players)
-                });
-            }
-            else {
-                match.teams[data.team].players.push({
-                    id: request.id,
-                    leader: _.isEmpty(match.teams[data.team].players)
-                });
-            }
-        }
+const join = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, (match) => {
+        match.teams = teamController.joinTeam(_.cloneDeep(match.teams), request, data);
         return match;
-    }).then((response) => {
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
-const leave = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var removed = _.remove(match.teams[data.team].players, {id: request.id})[0];
-        if (removed
-            && removed.leader
-            && !_.isEmpty(match.teams[data.team].players)
-        ){
-            match.teams[data.team].players[0].leader = true
-        }
+const leave = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, (match) => {
+        match.teams = teamController.leaveTeam(_.cloneDeep(match.teams), request.id, data);
         return match;
-    }).then((response) => {
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
 const ready = (redis, request, data, update) => {
