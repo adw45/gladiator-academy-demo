@@ -4,7 +4,6 @@ const redisMock = require('redis-mock'),
     matchController = require('../controllers/match.controller')
     matchService = require('./match.service')(redis),
     teamService = require('./team.service')(redis),
-    helpers = require('../helper.js'),
     update = (matchId, data) => {
         return { matchId, data }
     };
@@ -88,14 +87,6 @@ describe('team-service', () => {
         expected.data.teams.red.players.push({id: 'my-id2', leader: true});
 
         expect(response).to.deep.equal(expected);
-    });
-
-    it.skip('ready - a team with 3/4 players', async () => {
-
-    });
-
-    it.skip('ready - a team with less than 3 players', async () => {
-
     });
 
 });

@@ -56,9 +56,14 @@ const removePlayerFromTeams = (teams, id) => {
     return teams;
 };
 
+const hasThreeOrMorePlayers = (team) => {
+    return _.size(team.players) >= 3
+}
+
 module.exports = {
     createTeam,
     joinTeam,
     leaveTeam,
-    removePlayerFromTeams
+    removePlayerFromTeams,
+    hasThreeOrMorePlayers,
 }

@@ -1,7 +1,5 @@
-const helper = require('../helper'),
-    teamController = require('../controllers/team.controller'),
-    phaseService = require('./phase.service'),
-    _ = require('lodash');
+let _ = require('lodash'),
+    teamController = require('../controllers/team.controller');
 
 const join = async (redis, request, data, update) => {
     let result = await redis.updateMatch(request, (match) => {
@@ -19,30 +17,10 @@ const leave = async (redis, request, data, update) => {
     return update(request.matchId, result);
 };
 
-const ready = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        match.phase.ready[data.team] = true;
-        match.phase = matchService(match.phase);
-        return match;
-    }).then((response) => {
-        update(request.matchId, response);
-    });
-};
-
-const unready = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        match.phase.ready[data.team] = false;
-        return match;
-    }).then((response) => {
-        update(request.matchId, response);
-    });
-};
 
 module.exports = (redis) => {
     return {
         join: (request, data, update) => join(redis, request, data, update),
         leave: (request, data, update) => leave(redis, request, data, update),
-        ready: (request, data, update) => ready(redis, request, data, update),
-        unready: (request, data, update) => unready(redis, request, data, update)
     }
 };

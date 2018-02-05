@@ -6,6 +6,7 @@ const socketio = (server, services) => {
     let matchService = services.matchService,
         teamService = services.teamService,
         playerService = services.playerService,
+        phaseService = services.phaseService,
         update = (matchId, data) => {
             io.in(matchId).emit('update', data);
         };
@@ -39,11 +40,11 @@ const socketio = (server, services) => {
         });
 
         socket.on('team-ready', (data) => {
-            teamService.ready({id: socket.id, matchId: socket.matchId}, data, update);
+            phaseService.ready({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('team-unready', (data) => {
-            teamService.unready({id: socket.id, matchId: socket.matchId}, data, update);
+            phaseService.unready({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('player-nickname', (data) => {

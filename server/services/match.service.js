@@ -1,5 +1,4 @@
 const _ = require('lodash'),
-    helpers = require('../helper'),
     matchController = require('../controllers/match.controller');
 
 const join = async (redis, request, update) => {

@@ -1,10 +1,10 @@
 const redisMock = require('redis-mock'),
-    redis = require('../data/redis')(redisMock),
-    helper = require('../helper');
+    matchController = require('../controllers/match.controller'),
+    redis = require('../data/redis')(redisMock);
 
 describe('redis', () => {
     beforeEach(() => {
-        redis.createMatch({matchId: '123'}, helper.initializeRoom());
+        redis.createMatch({matchId: '123'}, matchController.createMatch());
     });
 
     afterEach(() => {
@@ -12,13 +12,13 @@ describe('redis', () => {
     });
 
     it('create -  new match', async () => {
-        let result = await redis.createMatch({matchId: '1234'}, helper.initializeRoom());
-        expect(await redis.getMatch({matchId: '1234'})).to.deep.equal(helper.initializeRoom())
+        let result = await redis.createMatch({matchId: '1234'}, matchController.createMatch());
+        expect(await redis.getMatch({matchId: '1234'})).to.deep.equal(matchController.createMatch())
     });
 
     it.skip('create - an already existing match', async () => {
         try {
-            await redis.createMatch({matchId: '123'}, helper.initializeRoom());
+            await redis.createMatch({matchId: '123'}, matchController.createMatch());
             assert.fail(null, null,'this should throw an error when trying to create an identical room');
         }
         catch(err) {
@@ -28,7 +28,7 @@ describe('redis', () => {
 
     it('get - a match', async () => {
         let result = await redis.getMatch({matchId: '123'});
-        expect(result).to.deep.equal(helper.initializeRoom());
+        expect(result).to.deep.equal(matchController.createMatch());
     });
 
     it.skip('get - a non-existing match', async () => {
@@ -47,7 +47,7 @@ describe('redis', () => {
             match.size += 1;
             return match;
         })
-        expect(result).to.deep.equal(_.merge(helper.initializeRoom(), {size: 2}))
+        expect(result).to.deep.equal(_.merge(matchController.createMatch(), {size: 2}))
     });
 
     it.skip('update - a non-exiting match', async () => {
@@ -55,7 +55,7 @@ describe('redis', () => {
             match.size += 1;
             return match;
         })
-        expect(result).to.deep.equal(_.merge(helper.initializeRoom(), {size: 2}))
+        expect(result).to.deep.equal(_.merge(matchController.createMatch(), {size: 2}))
     });
 
     it('redis - delete - a match', async () => {
