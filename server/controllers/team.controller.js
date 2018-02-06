@@ -1,4 +1,5 @@
 let _ = require('lodash'),
+    playerController = require('./player.controller'),
     MAX_TEAM_SIZE = 4;
 
 const createTeam = () => {
@@ -19,6 +20,7 @@ const joinTeam = (teams, request, data) => {
 
     teams = removePlayerFromTeams(_.cloneDeep(teams), request.id);
 
+    // playerController.newPlayer();
     teams[data.team].players.push({
         id: request.id,
         leader: _.isEmpty(teams[data.team].players)

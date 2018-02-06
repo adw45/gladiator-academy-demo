@@ -51,16 +51,16 @@ const socketio = (server, services) => {
             playerService.nickname({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('player-blizzId', (data) => {
-            playerService.blizzId({id: socket.id, matchId: socket.matchId}, data, update);
+        socket.on('player-blizzardId', (data) => {
+            playerService.blizzardId({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('player-charName', (data) => {
-            playerService.charName({id: socket.id, matchId: socket.matchId}, data, update);
+        socket.on('player-characterName', (data) => {
+            playerService.characterName({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
-        socket.on('player-spec', (data) => {
-            playerService.spec({id: socket.id, matchId: socket.matchId}, data, update);
+        socket.on('player-classSpec', (data) => {
+            playerService.classSpec({id: socket.id, matchId: socket.matchId}, data, update);
         });
 
         socket.on('player-leader', (data) => {

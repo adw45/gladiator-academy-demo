@@ -1,65 +1,71 @@
-const _  = require('lodash');
+const _  = require('lodash'),
+    playerController = require('../controllers/player.controller');
 
-const nickname = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var player = _.find(match.teams[data.team].players, {id: request.id});
-        player.nickname = data.nickname;
+const nickname = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateNickname(
+            _.cloneDeep(match.teams[data.team].players),
+            request.id,
+            data
+        );
         return match;
-    }).then(function(response){
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
-const blizzId = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var player = _.find(match.teams[data.team].players, {id: request.id});
-        player.blizzId = data.blizzId
+const blizzardId = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateBlizzardId(
+            _.cloneDeep(match.teams[data.team].players),
+            request.id,
+            data
+        );
         return match;
-    }).then(function(response){
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
-const charName = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var player = _.find(match.teams[data.team].players, {id: request.id});
-        player.charName = data.charName
+const characterName = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateCharacterName(
+            _.cloneDeep(match.teams[data.team].players),
+            request.id,
+            data
+        );
         return match;
-    }).then(function(response){
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
-const spec = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var player = _.find(match.teams[data.team].players, {id: request.id});
-        player.spec = data.spec;
+const classSpec = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateClassSpec(
+            _.cloneDeep(match.teams[data.team].players),
+            request.id,
+            data
+        );
         return match;
-    }).then(function(response){
-        update(request.matchId, response);
     });
+    return update(request.matchId, result);
 };
 
-const leader = (redis, request, data, update) => {
-    redis.updateMatch(request, (match) => {
-        var player = _.find(match.teams[data.team].players, {id: request.id});
-        if(player.leader) {
-            player.leader = false;
-            var newLeader = _.find(match.teams[data.team].players, {id: data.playerId});
-            newLeader.leader = true;
-        }
+const leader = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateLeader(
+            _.cloneDeep(match.teams[data.team].players),
+            {oldLeader: request.id, newLeader: data.playerId}
+        );
         return match;
-    }).then(function(response){
-        update(request.matchId, response);
-    });
+    })
+    return update(request.matchId, result);
 };
 
 module.exports = (redis) =>  {
     return {
         nickname: (request, data, update) => nickname(redis, request, data, update),
-        blizzId: (request, data, update) => blizzId(redis, request, data, update),
-        charName: (request, data, update) => charName(redis, request, data, update),
-        spec: (request, data, update) => spec(redis, request, data, update),
+        blizzardId: (request, data, update) => blizzardId(redis, request, data, update),
+        characterName: (request, data, update) => characterName(redis, request, data, update),
+        classSpec: (request, data, update) => classSpec(redis, request, data, update),
         leader: (request, data, update) => leader(redis, request, data, update)
     }
 };

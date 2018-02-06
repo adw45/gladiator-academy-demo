@@ -69,10 +69,9 @@ Working on a datamodel that can represent all the info necessary. This is going 
                 {
                     'id': '123456asdfg',
                     nickname: 'Aweb',
-                    'blizz-id': 'aweb#1521',
-                    character: 'Chiweb',
-                    class: 'Monk'
-                    spec: 'Mistweaver',
+                    blizzardId: 'aweb#1521',
+                    characterName: 'Chiweb',
+                    classSpec: 'monk-mistweaver',
                     faction: 'alliance',
                     leader: true
                 },

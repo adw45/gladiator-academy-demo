@@ -11,54 +11,54 @@ export default {
             required: true
         },
         nickname: String,
-        blizzId: String,
-        charName: String,
-        spec: String
+        blizzardId: String,
+        characterName: String,
+        classSpec: String
     },
     methods: {
         updateNickname(nickname) {
-            this.$socket.emit('player-nickname', { 
-                team: this.team, 
-                positon: this.position, 
-                nickname: nickname 
+            this.$socket.emit('player-nickname', {
+                team: this.team,
+                positon: this.position,
+                nickname: nickname
             });
         },
-        updateBlizzId(blizzId) {
-            this.$socket.emit('player-blizzId', { 
-                team: this.team, 
-                positon: this.position, 
-                blizzId: blizzId 
+        updateBlizzardId(blizzardId) {
+            this.$socket.emit('player-blizzardId', {
+                team: this.team,
+                positon: this.position,
+                blizzardId: blizzardId
             });
         },
-        updateCharName(charName) {
-            this.$socket.emit('player-charName', { 
-                team: this.team, 
-                positon: this.position, 
-                charName: charName 
+        updateCharacterName(characterName) {
+            this.$socket.emit('player-characterName', {
+                team: this.team,
+                positon: this.position,
+                characterName: characterName
             });
         },
         updateLeader(playerId) {
-            this.$socket.emit('player-leader', { 
-                team: this.team, 
+            this.$socket.emit('player-leader', {
+                team: this.team,
                 positon: this.position,
                 playerId: playerId
             });
         },
-        updateSpec(spec){
-            this.$socket.emit('player-spec', { 
-                team: this.team, 
+        updateClassSpec(classSpec){
+            this.$socket.emit('player-classSpec', {
+                team: this.team,
                 positon: this.position,
-                spec: spec
+                classSpec: classSpec
             });
         },
         submit() {
             console.log(this);
-            return 
+            return
        }
     },
     computed: {
         exists() {
-            if (this.$store.state.playerSelect.teams[this.team] !== undefined && 
+            if (this.$store.state.playerSelect.teams[this.team] !== undefined &&
                 this.$store.state.playerSelect.teams[this.team]["players"][this.position] !== undefined) {
                 return true;
             }
@@ -66,9 +66,9 @@ export default {
         },
         player() {
             return this.$store.state.playerSelect.teams[this.team]["players"][this.position];
-        }, 
+        },
         editable() {
-            return this.$store.state.id === 
+            return this.$store.state.id ===
                 this.$store.state.playerSelect.teams[this.team]["players"][this.position]["id"];
         },
         isLeader() {
@@ -92,8 +92,8 @@ export default {
             return false
         },
         isSelectPhase() {
-            var phase = this.$store.state.phase 
-            return phase.type === 'blind-pick' 
+            var phase = this.$store.state.phase
+            return phase.type === 'blind-pick'
                 ||  phase.type === 'team-pick' && phase.team === this.team;
         }
     }

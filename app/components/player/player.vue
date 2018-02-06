@@ -3,21 +3,21 @@
         <div v-if="exists && editable">
             <div>
                 <span v-if="player.leader" class="glyphicon glyphicon-star"></span>
-                <input type='text'  placeholder='Nickname' 
+                <input type='text'  placeholder='Nickname'
                     :value='player.nickname'
-                    v-bind:nickname='nickname' 
+                    v-bind:nickname='nickname'
                     v-on:blur='updateNickname($event.target.value)'></input>
                 <input type='text' placeholder='Blizzard Id'
-                    :value='player.blizzId' 
-                    v-bind:blizzId='blizzId'
-                    v-on:blur='updateBlizzId($event.target.value)'></input>
+                    :value='player.blizzardId'
+                    v-bind:blizzardId='blizzardId'
+                    v-on:blur='updateBlizzardId($event.target.value)'></input>
             </div>
             <div>
-                <select 
-                    :value='player.spec' 
+                <select
+                    :value='player.classSpec'
                     :disabled='!isSelectPhase'
-                    v-bind:spec='spec' 
-                    v-on:change='updateSpec($event.target.value)'>
+                    v-bind:classSpec='classSpec'
+                    v-on:change='updateClassSpec($event.target.value)'>
                     <optgroup label="Death Knight">
                         <option value='dk-blood'>Blood</option>
                         <option value='dk-frost'>Frost</option>
@@ -80,25 +80,25 @@
                     </optgroup>
                 </select>
                 <input type='text'  placeholder='Character Name'
-                    :value='player.charName'
+                    :value='player.characterName'
                     :disabled='!isSelectPhase'
-                    v-bind:charName='charName'
-                    v-on:blur='updateCharName($event.target.value)'></input>
+                    v-bind:characterName='characterName'
+                    v-on:blur='updateCharacterName($event.target.value)'></input>
                 <button v-if='isSelectPhase' @click="submit()">Lock In</button>
             </div>
         </div>
         <div v-else-if="exists && !editable">
-            <span v-if="player.leader" class="glyphicon glyphicon-star"></span> 
-            <button v-if="isLeader && sameTeam" 
+            <span v-if="player.leader" class="glyphicon glyphicon-star"></span>
+            <button v-if="isLeader && sameTeam"
                 @click="updateLeader(player.id)">Make Leader</button>
             {{ player.nickname }}
-            {{ player.blizzId }}
-            {{ player.spec }}
-            {{ player.charName }}
-        </div> 
+            {{ player.blizzardId }}
+            {{ player.classSpec }}
+            {{ player.characterName }}
+        </div>
         <div v-else class='empty'>
             empty
-        </div> 
+        </div>
     </div>
 </template>
 
