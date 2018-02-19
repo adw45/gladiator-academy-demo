@@ -39,21 +39,28 @@ const updateClassSpec = (players, id, data) => {
     return players;
 }
 
-const updateLeader = (players, ids) => {
-    let oldLeader = _.find(players, {id: ids.oldLeader});
-    let newLeader = _.find(players, {id: ids.newLeader});
-    if (oldLeader && newLeader) {
-        oldLeader.leader = false;
-        newLeader.leader = true;
-    }
-    return players;
-}
-
 const updateFaction = (players, id, data) => {
     let player = _.find(players, {id});
     if (player) {
         player.faction = data.faction;
     }
+    return players;
+}
+
+const updateLeader = (players, ids) => {
+    let oldLeader = _.find(players, {id: ids.oldLeader});
+
+    if (!oldLeader.leader) {
+        return players;
+    }
+
+    let newLeader = _.find(players, {id: ids.newLeader});
+
+    if (oldLeader && newLeader) {
+        oldLeader.leader = false;
+        newLeader.leader = true;
+    }
+
     return players;
 }
 
@@ -63,6 +70,6 @@ module.exports = {
     updateBlizzardId,
     updateCharacterName,
     updateClassSpec,
-    updateLeader,
-    updateFaction
+    updateFaction,
+    updateLeader
 }
