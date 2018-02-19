@@ -1,5 +1,12 @@
 let _ = require('lodash');
 
+const createPlayer = (id, isLeader) => {
+    return {
+        id,
+        leader: isLeader
+    }
+}
+
 const updateNickname = (players, id, data) => {
     let player = _.find(players, {id});
     if (player) {
@@ -42,10 +49,20 @@ const updateLeader = (players, ids) => {
     return players;
 }
 
+const updateFaction = (players, id, data) => {
+    let player = _.find(players, {id});
+    if (player) {
+        player.faction = data.faction;
+    }
+    return players;
+}
+
 module.exports = {
+    createPlayer,
     updateNickname,
     updateBlizzardId,
     updateCharacterName,
     updateClassSpec,
-    updateLeader
+    updateLeader,
+    updateFaction
 }

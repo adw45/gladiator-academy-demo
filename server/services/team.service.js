@@ -11,7 +11,7 @@ const join = async (redis, request, data, update) => {
 
 const leave = async (redis, request, data, update) => {
     let result = await redis.updateMatch(request, (match) => {
-        match.teams = teamController.leaveTeam(_.cloneDeep(match.teams), request.id, data);
+        match.teams[data.team] = teamController.leaveTeam(_.cloneDeep(match.teams[data.team]), request.id);
         return match;
     });
     return update(request.matchId, result);

@@ -20,11 +20,9 @@ const joinTeam = (teams, request, data) => {
 
     teams = removePlayerFromTeams(_.cloneDeep(teams), request.id);
 
-    // playerController.newPlayer();
-    teams[data.team].players.push({
-        id: request.id,
-        leader: _.isEmpty(teams[data.team].players)
-    });
+    teams[data.team].players.push(
+        playerController.createPlayer(request.id, _.isEmpty(teams[data.team].players))
+    );
 
     return teams;
 };
@@ -37,9 +35,8 @@ const isTeamFull = (team) => {
     return false;
 };
 
-const leaveTeam = (teams, id, data) => {
-    teams[data.team] = removePlayerFromTeam(_.cloneDeep(teams[data.team]), id)
-    return teams;
+const leaveTeam = (team, id) => {
+    return removePlayerFromTeam(_.cloneDeep(team), id)
 };
 
 const removePlayerFromTeam = (team, id) => {
@@ -62,10 +59,25 @@ const hasThreeOrMorePlayers = (team) => {
     return _.size(team.players) >= 3
 }
 
+// TODO: Eventually have a 'lock player' functionality that counts this better.
+const hasThreeSelectedPlayers = (team) => {
+    return _.size(_.map(team.players, 'characterName')) === 3;
+}
+
+const isSameFaction = (team) => {
+    let factions = _.countBy(_.map(team.players, 'faction'));
+    if (factions.horde && factions.alliance) {
+        return false;
+    }
+    return true;
+}
+
 module.exports = {
     createTeam,
     joinTeam,
     leaveTeam,
     removePlayerFromTeams,
     hasThreeOrMorePlayers,
+    hasThreeSelectedPlayers,
+    isSameFaction
 }

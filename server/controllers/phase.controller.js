@@ -17,6 +17,11 @@ const teamReady = (phase, team) => {
             phase.ready[team.color] = true
         }
     }
+    if (phase.type === 'blind-pick') {
+        if (isTeamFormed(team.team) && hasThreeSelectedPlayers(team.team) && isSameFaction(team.team)) {
+            phase.ready[team.color] = true;
+        }
+    }
 
     if (bothTeamsReady(phase)) {
         return next(phase)
@@ -40,7 +45,43 @@ const next = (phase) => {
             }
         }
     }
-    return 'NOTHING_HERE_YET'
+    if (phase.type === 'blind-pick') {
+        return {
+            type: 'round-one',
+            ready: {
+                red: false,
+                blue: false
+            }
+        }
+    }
+    if (phase.type === 'round-one') {
+        return {
+            type: 'map-pick-one',
+            ready: {
+                red: false,
+                blue: false
+            }
+        }
+    }
+    if (phase.type === 'map-pick-one') {
+        return {
+            type: 'winner-pick-one',
+            ready: {
+                red: false,
+                blue: false
+            }
+        }
+    }
+    if (phase.type === 'winner-pick-one') {
+        return {
+            type: 'loser-pick-one',
+            ready: {
+                red: false,
+                blue: false
+            }
+        }
+    }
+    return phase;
 }
 
 const isTeamFormed = (team) => {
@@ -49,6 +90,14 @@ const isTeamFormed = (team) => {
 
 const bothTeamsReady = (phase) => {
     return phase.ready.red && phase.ready.blue;
+}
+
+const hasThreeSelectedPlayers = (team) => {
+    return teamController.hasThreeSelectedPlayers()
+}
+
+const isSameFaction = (team) => {
+    return teamController.isSameFaction(team);
 }
 
 module.exports = {

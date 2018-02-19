@@ -60,12 +60,25 @@ const leader = async (redis, request, data, update) => {
     return update(request.matchId, result);
 };
 
+const faction = async (redis, request, data, update) => {
+    let result = await redis.updateMatch(request, match => {
+        match.teams[data.team].players = playerController.updateFaction(
+            _.cloneDeep(match.teams[data.team].players),
+            request.id,
+            data
+        );
+        return match;
+    })
+    return update(request.matchId, result);
+};
+
 module.exports = (redis) =>  {
     return {
         nickname: (request, data, update) => nickname(redis, request, data, update),
         blizzardId: (request, data, update) => blizzardId(redis, request, data, update),
         characterName: (request, data, update) => characterName(redis, request, data, update),
         classSpec: (request, data, update) => classSpec(redis, request, data, update),
+        faction: (request, data, update) => faction(redis, request, data, update),
         leader: (request, data, update) => leader(redis, request, data, update)
     }
 };

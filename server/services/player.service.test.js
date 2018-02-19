@@ -155,4 +155,31 @@ describe('player-service', () => {
         expect(response).to.deep.equal(expected);
     });
 
+    it('player - faction', async () => {
+        await matchService.join({matchId: '123'}, update);
+        await teamService.join({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
+
+        let response = await playerService.faction({matchId: '123', id:'my-id1'},
+            {team: 'red', faction: 'horde'}, update)
+
+        let expected = {data: matchController.createMatch(), matchId: '123'};
+        expected.data.teams.red.players.push({id: 'my-id1', leader: true});
+        expected.data.teams.red.players[0].faction = 'horde';
+
+        expect(response).to.deep.equal(expected);
+    });
+
+    it('player - faction - player doesnt exist', async () => {
+        await matchService.join({matchId: '123'}, update);
+        await teamService.join({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
+
+        let response = await playerService.faction({matchId: '123', id:'my-id1-xxx'},
+            {team: 'red', classSpec: 'horde'}, update)
+
+        let expected = {data: matchController.createMatch(), matchId: '123'};
+        expected.data.teams.red.players.push({id: 'my-id1', leader: true});
+
+        expect(response).to.deep.equal(expected);
+    });
+
 });
