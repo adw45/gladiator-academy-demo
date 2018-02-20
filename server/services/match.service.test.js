@@ -15,7 +15,7 @@ describe('match-service', () => {
     it('join - an empty match', async () => {
         let response  = await matchService.join({matchId: '123'}, update);
         expect(response).to.deep.equal({
-            data: matchController.createMatch(),
+            data: _.merge(matchController.createMatch('123'), {size: 1}),
             matchId: '123'
         });
     });
@@ -25,7 +25,7 @@ describe('match-service', () => {
         let response = await matchService.join({matchId: '123'}, update);
 
         expect(response).to.deep.equal({
-            data: _.merge(matchController.createMatch(), {size: 2}),
+            data: _.merge(matchController.createMatch('123'), {size: 2}),
             matchId: '123'
         });
     });
@@ -36,7 +36,7 @@ describe('match-service', () => {
 
         let response = await redis.getMatch({matchId: '123'})
 
-        expect(response).to.deep.equal(_.merge(matchController.createMatch(), {size: 0}));
+        expect(response).to.deep.equal(_.merge(matchController.createMatch('123'), {size: 0}));
     });
 
     it('leave -  an existing match with no one left', async () => {
@@ -46,7 +46,7 @@ describe('match-service', () => {
 
         let response = await redis.getMatch({matchId: '123'})
 
-        expect(response).to.deep.equal(_.merge(matchController.createMatch(), {size: 0}));
+        expect(response).to.deep.equal(_.merge(matchController.createMatch('123'), {size: 0}));
     });
 
     it('leave - a match that doesnt exists', async () => {
@@ -57,12 +57,12 @@ describe('match-service', () => {
     it('destroy - an existing match', async () => {
         let match = await matchService.join({matchId: '123'}, update);
         expect(match).to.deep.equal({
-            data: matchController.createMatch(),
+            data: _.merge(matchController.createMatch('123'), {size: 1}),
             matchId: '123'
         });
 
         await matchService.destroy({matchId: '123'});
-        let matchShouldNotExist = redis.getMatch({matchId: 123});
+        let matchShouldNotExist = redis.getMatch({matchId: '123'});
         expect(_.isEmpty(matchShouldNotExist)).to.equal(true);
     });
 

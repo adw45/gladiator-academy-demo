@@ -23,7 +23,7 @@ describe('team-controller', () => {
                 red: team,
                 blue: {players: []}
             },
-            {id: 123},
+            123,
             {team: 'red'}
         );
 
@@ -45,7 +45,7 @@ describe('team-controller', () => {
                 red: team,
                 blue: {players: []}
             },
-            {id: 1234},
+            1234,
             {team: 'red'}
         );
 
@@ -66,7 +66,7 @@ describe('team-controller', () => {
             blue: { players: [] }
         };
 
-        let response = teamController.joinTeam(teams, {id: 123}, {team: 'blue'});
+        let response = teamController.joinTeam(teams, 123, {team: 'blue'});
 
         expect(response).to.deep.equal({
             blue: {

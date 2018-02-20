@@ -6,15 +6,16 @@ const join = async (redis, request, update) => {
         result;
 
     if (!match) {
-        result = await redis.createMatch(request, matchController.createMatch());
-    } else {
-        result = await redis.updateMatch(request, (match) => matchController.joinExistingMatch(_.cloneDeep(match)));
+        await redis.createMatch(request, matchController.createMatch(request.matchId));
     }
+
+    result = await redis.updateMatch(request, (match) => matchController.joinExistingMatch(_.cloneDeep(match)));
+
     return update(request.matchId, result);
 };
 
 const leave = async (redis, request, update) => {
-    let match = await redis.updateMatch(request, (match) => matchController.leaveMatch(_.cloneDeep(match), request));
+    let match = await redis.updateMatch(request, (match) => matchController.leaveMatch(_.cloneDeep(match), request.id));
     return update(request.matchId, match);
 };
 

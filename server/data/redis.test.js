@@ -4,7 +4,7 @@ const redisMock = require('redis-mock'),
 
 describe('redis', () => {
     beforeEach(() => {
-        redis.createMatch({matchId: '123'}, matchController.createMatch());
+        redis.createMatch({matchId: '123'}, matchController.createMatch('123'));
     });
 
     afterEach(() => {
@@ -12,13 +12,13 @@ describe('redis', () => {
     });
 
     it('create -  new match', async () => {
-        let result = await redis.createMatch({matchId: '1234'}, matchController.createMatch());
-        expect(await redis.getMatch({matchId: '1234'})).to.deep.equal(matchController.createMatch())
+        let result = await redis.createMatch({matchId: '1234'}, matchController.createMatch('123'));
+        expect(await redis.getMatch({matchId: '1234'})).to.deep.equal(matchController.createMatch('123'))
     });
 
     it.skip('create - an already existing match', async () => {
         try {
-            await redis.createMatch({matchId: '123'}, matchController.createMatch());
+            await redis.createMatch({matchId: '123'}, matchController.createMatch('123'));
             assert.fail(null, null,'this should throw an error when trying to create an identical room');
         }
         catch(err) {
@@ -28,7 +28,7 @@ describe('redis', () => {
 
     it('get - a match', async () => {
         let result = await redis.getMatch({matchId: '123'});
-        expect(result).to.deep.equal(matchController.createMatch());
+        expect(result).to.deep.equal(matchController.createMatch('123'));
     });
 
     it.skip('get - a non-existing match', async () => {
@@ -47,7 +47,7 @@ describe('redis', () => {
             match.size += 1;
             return match;
         })
-        expect(result).to.deep.equal(_.merge(matchController.createMatch(), {size: 2}))
+        expect(result).to.deep.equal(_.merge(matchController.createMatch('123'), {size: 1}))
     });
 
     it.skip('update - a non-exiting match', async () => {
@@ -55,7 +55,7 @@ describe('redis', () => {
             match.size += 1;
             return match;
         })
-        expect(result).to.deep.equal(_.merge(matchController.createMatch(), {size: 2}))
+        expect(result).to.deep.equal(_.merge(matchController.createMatch('1234'), {size: 2}))
     });
 
     it('redis - delete - a match', async () => {

@@ -3,10 +3,11 @@ const _ = require('lodash'),
     mapController = require('./map.controller'),
     phaseController = require('./phase.controller');
 
-const createMatch = () => {
+const createMatch = (id) => {
     return {
+        id,
         type: 'standard',
-        size: 1,
+        size: 0,
         bestOf: 3,
         redScore: 0,
         blueScore: 0,
@@ -21,12 +22,12 @@ const joinExistingMatch = (match) => {
     return match;
 }
 
-const leaveMatch = (match, request) => {
+const leaveMatch = (match, playerId) => {
         if (!match) {
             return;
         }
 
-        match.teams = teamController.removePlayerFromTeams(_.cloneDeep(match.teams), request.id);
+        match.teams = teamController.removePlayerFromTeams(_.cloneDeep(match.teams), playerId);
 
         if (match.size > 0) {
             match.size--;

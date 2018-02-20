@@ -3,7 +3,7 @@ let _ = require('lodash'),
 
 const join = async (redis, request, data, update) => {
     let result = await redis.updateMatch(request, (match) => {
-        match.teams = teamController.joinTeam(_.cloneDeep(match.teams), request, data);
+        match.teams = teamController.joinTeam(_.cloneDeep(match.teams), request.id, data);
         return match;
     });
     return update(request.matchId, result);

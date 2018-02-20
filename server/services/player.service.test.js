@@ -21,7 +21,7 @@ describe('player-service', () => {
         let response = await playerService.nickname({matchId: '123', id:'my-id1'},
             {team: 'red', nickname: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].nickname = 'hello world';
 
@@ -35,7 +35,7 @@ describe('player-service', () => {
         let response = await playerService.nickname({matchId: '123', id:'my-id1-xxx'},
             {team: 'red', nickname: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -48,7 +48,7 @@ describe('player-service', () => {
         let response = await playerService.blizzardId({matchId: '123', id:'my-id1'},
             {team: 'red', blizzardId: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].blizzardId = 'hello world';
 
@@ -62,7 +62,7 @@ describe('player-service', () => {
         let response = await playerService.blizzardId({matchId: '123', id:'my-id1-xxx'},
             {team: 'red', blizzardId: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -75,7 +75,7 @@ describe('player-service', () => {
         let response = await playerService.characterName({matchId: '123', id:'my-id1'},
             {team: 'red', characterName: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].characterName = 'hello world';
 
@@ -89,7 +89,7 @@ describe('player-service', () => {
         let response = await playerService.characterName({matchId: '123', id:'my-id1-xxx'},
             {team: 'red', characterName: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -103,7 +103,7 @@ describe('player-service', () => {
         let response = await playerService.classSpec({matchId: '123', id:'my-id1'},
             {team: 'red', classSpec: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].classSpec = 'hello world';
 
@@ -117,7 +117,7 @@ describe('player-service', () => {
         let response = await playerService.classSpec({matchId: '123', id:'my-id1-xxx'},
             {team: 'red', classSpec: 'hello world'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -131,7 +131,7 @@ describe('player-service', () => {
         let response = await playerService.leader({matchId: '123', id:'my-id1'},
             {team: 'red', playerId: 'my-id2'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].leader = false;
 
@@ -148,7 +148,7 @@ describe('player-service', () => {
         let response = await playerService.leader({matchId: '123', id:'my-id1'},
             {team: 'red', playerId: 'my-id2'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].leader = true;
 
@@ -162,7 +162,7 @@ describe('player-service', () => {
         let response = await playerService.faction({matchId: '123', id:'my-id1'},
             {team: 'red', faction: 'horde'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players[0].faction = 'horde';
 
@@ -176,7 +176,7 @@ describe('player-service', () => {
         let response = await playerService.faction({matchId: '123', id:'my-id1-xxx'},
             {team: 'red', classSpec: 'horde'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);

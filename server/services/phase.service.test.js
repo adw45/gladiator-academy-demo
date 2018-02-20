@@ -22,7 +22,7 @@ describe('phase-service', () => {
 
         let response = await phaseService.ready({matchId: '123', id:'my-id1'}, {team: 'red'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.phase.ready.red = false;
@@ -38,7 +38,7 @@ describe('phase-service', () => {
 
         let response = await phaseService.ready({matchId: '123', id:'my-id1'},{team: 'red'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -56,7 +56,7 @@ describe('phase-service', () => {
 
         let response = await phaseService.ready({matchId: '123', id:'my-id1'}, {team: 'red'}, update)
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -69,7 +69,7 @@ describe('phase-service', () => {
     it('phase - form-group - both teams ready phase -> blind-pick', async () => {
         let response =  await setupPhaseToBlindPick()
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -93,7 +93,7 @@ describe('phase-service', () => {
 
         let readyResponse = await phaseService.ready({matchId: '123', id:'my-id1'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -146,7 +146,7 @@ const setupPhaseToBlindPick = async () => {
 };
 
 const blindPickExpected = () => {
-    let expected = {data: matchController.createMatch(), matchId: '123'};
+    let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({
             id: 'my-id1', leader: true, blizzardId: 'blizzId1', characterName: 'characterName1',
             classSpec: 'class-spec1', faction: 'horde', nickname: 'nickname1'

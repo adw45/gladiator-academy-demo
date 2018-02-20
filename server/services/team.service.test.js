@@ -17,7 +17,7 @@ describe('team-service', () => {
         await matchService.join({matchId: '123'}, update);
         let response = await teamService.join({matchId: '123', id: 'my-id'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -30,7 +30,7 @@ describe('team-service', () => {
         await teamService.join({matchId: '123', id: 'my-id3'}, {team: 'red'}, update);
         let response = await teamService.join({matchId: '123', id: 'my-id4'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -47,7 +47,7 @@ describe('team-service', () => {
         await teamService.join({matchId: '123', id: 'my-id4'}, {team: 'red'}, update);
         let response = await teamService.join({matchId: '123', id: 'my-id-wont-join'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id1', leader: true});
         expected.data.teams.red.players.push({id: 'my-id2', leader: false});
         expected.data.teams.red.players.push({id: 'my-id3', leader: false});
@@ -61,7 +61,7 @@ describe('team-service', () => {
         await teamService.join({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
         let response = await teamService.join({matchId: '123', id: 'my-id1'}, {team: 'blue'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.blue.players.push({id: 'my-id1', leader: true});
 
         expect(response).to.deep.equal(expected);
@@ -72,7 +72,7 @@ describe('team-service', () => {
         await teamService.join({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
         let response = await teamService.leave({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
 
         expect(response).to.deep.equal(expected);
     });
@@ -83,7 +83,7 @@ describe('team-service', () => {
         await teamService.join({matchId: '123', id: 'my-id2'}, {team: 'red'}, update);
         let response = await teamService.leave({matchId: '123', id: 'my-id1'}, {team: 'red'}, update);
 
-        let expected = {data: matchController.createMatch(), matchId: '123'};
+        let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
         expected.data.teams.red.players.push({id: 'my-id2', leader: true});
 
         expect(response).to.deep.equal(expected);

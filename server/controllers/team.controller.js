@@ -13,15 +13,15 @@ const createTeam = () => {
     };
 };
 
-const joinTeam = (teams, request, data) => {
+const joinTeam = (teams, playerId, data) => {
     if (isTeamFull(teams[data.team])) {
         return teams;
     }
 
-    teams = removePlayerFromTeams(_.cloneDeep(teams), request.id);
+    teams = removePlayerFromTeams(_.cloneDeep(teams), playerId);
 
     teams[data.team].players.push(
-        playerController.createPlayer(request.id, _.isEmpty(teams[data.team].players))
+        playerController.createPlayer(playerId, _.isEmpty(teams[data.team].players))
     );
 
     return teams;
