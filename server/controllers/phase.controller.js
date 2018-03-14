@@ -18,7 +18,8 @@ const teamReady = (phase, team) => {
         }
     }
     if (phase.type === 'blind-pick') {
-        if (isTeamFormed(team.team) && hasThreeSelectedPlayers(team.team) && isSameFaction(team.team)) {
+        // TODO: isSameFaction();
+        if (isTeamFormed(team.team) && hasThreeSelectedPlayers(team.team) /*&& isSameFaction(team.team)*/) {
             phase.ready[team.color] = true;
         }
     }
@@ -35,7 +36,19 @@ const teamUnready = (phase, team) => {
     return phase;
 }
 
-const next = (phase) => {
+const winner = (phase, reportingLeader, winningTeam) => {
+    if (_.includes(['round-one', 'round-two', 'round-three'], phase.type)) {
+        phase.winner[reportingLeader] = winningTeam;
+        if (phase.winner.red === phase.winner.blue) {
+            const winningTeam = phase.winner.red,
+                losingTeam = winningTeam === 'red' ? 'blue' : 'red';
+            return next(phase, {winningTeam, losingTeam});
+        }
+    }
+    return phase;
+}
+
+const next = (phase, data) => {
     if(phase.type === 'form-team') {
         return {
             type: 'blind-pick',
@@ -48,28 +61,23 @@ const next = (phase) => {
     if (phase.type === 'blind-pick') {
         return {
             type: 'round-one',
-            ready: {
-                red: false,
-                blue: false
+            winner: {
+                red: null,
+                blue: null
             }
         }
     }
     if (phase.type === 'round-one') {
         return {
             type: 'map-pick-one',
-            ready: {
-                red: false,
-                blue: false
-            }
+            winningTeam: data.winningTeam,
+            losingTeam: data.losingTeam
         }
     }
     if (phase.type === 'map-pick-one') {
         return {
             type: 'winner-pick-one',
-            ready: {
-                red: false,
-                blue: false
-            }
+
         }
     }
     if (phase.type === 'winner-pick-one') {
@@ -103,5 +111,6 @@ const isSameFaction = (team) => {
 module.exports = {
     getInitialPhase,
     teamReady,
-    teamUnready
+    teamUnready,
+    winner
 }

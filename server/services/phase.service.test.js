@@ -118,12 +118,30 @@ describe('phase-service', () => {
         expect(response).to.deep.equal(expected);
     });
 
-    it('phase - blind pick - both teams ready -> first round', async () => {
-        await setupPhaseToBlindPick();
-        await setupBlindPickPlayers('red', 'horde', 'my');
-        let response = await setupBlindPickPlayers('blue', 'alliance', 'your');
+    it('phase - round-one - progress through blind-pick', async () => {
+        const response = await setupPhaseToRoundOne();
 
-        let expected = blindPickExpected();
+        const expected = roundOneExpected();
+
+        expect(response).to.deep.equal(expected);
+    });
+
+    it('phase - round-one - red leader picks winner', async () => {
+        await setupPhaseToRoundOne();
+        await phaseService.winner({matchId: '123', id:'my-id1'}, {reportedWinner: 'red'}, update)
+        const response = await phaseService.winner({matchId: '123', id:'your-id1'}, {reportedWinner: 'blue'}, update)
+
+        const expected = roundOneExpected();
+        expected.data.phase.winner.red = 'red';
+        expected.data.phase.winner.blue = 'blue';
+
+        expect(response).to.deep.equal(expected);
+    });
+
+    it('phase - map-pick-one - progress through round-one', async () => {
+        let response = await setupPhaseToMapPickOne();
+
+        const expected = mapPickOneExpected();
 
         expect(response).to.deep.equal(expected);
     });
@@ -144,6 +162,21 @@ const setupPhaseToBlindPick = async () => {
     await phaseService.ready({matchId: '123', id:'my-id1'}, {team: 'red'}, update);
     return await phaseService.ready({matchId: '123', id:'your-id1'}, {team: 'blue'}, update);
 };
+
+const setupPhaseToRoundOne = async () => {
+    await setupPhaseToBlindPick();
+    await setupBlindPickPlayers('red', 'horde', 'my');
+    await setupBlindPickPlayers('blue', 'alliance', 'your');
+
+    await phaseService.ready({matchId: '123', id:'my-id1'}, {team: 'red'}, update);
+    return await phaseService.ready({matchId: '123', id:'your-id1'}, {team: 'blue'}, update);
+}
+
+const setupPhaseToMapPickOne = async () => {
+    await setupPhaseToRoundOne()
+    await phaseService.winner({matchId: '123', id:'my-id1'}, {reportedWinner: 'red'}, update)
+    return await phaseService.winner({matchId: '123', id:'your-id1'}, {reportedWinner: 'red'}, update)
+}
 
 const blindPickExpected = () => {
     let expected = {data: _.merge(matchController.createMatch('123'), {size: 1}), matchId: '123'};
@@ -178,6 +211,34 @@ const blindPickExpected = () => {
         expected.data.phase.type = 'blind-pick';
 
         return expected;
+}
+
+const roundOneExpected = () => {
+    let expected = blindPickExpected();
+
+    expected.data.phase = {
+        type: 'round-one',
+        winner: {
+            red: null,
+            blue: null
+        }
+    };
+
+    return expected;
+}
+
+const mapPickOneExpected = () => {
+    let expected = roundOneExpected();
+
+    expected.data.phase = {
+        type: 'map-pick-one',
+        ready: {
+            red: false,
+            blue: false
+        }
+    }
+
+    return expected;
 }
 
 const setupBlindPickPlayers = async(team, faction, who) => {

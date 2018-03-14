@@ -31,6 +31,10 @@ const socketio = (server, services) => {
             matchService.join({matchId: socket.matchId}, update);
         });
 
+        socket.on('phase-winner', (data) => {
+            phaseService.winner({id: socket.id, matchId: socket.matchId}, data, update);
+        });
+
         socket.on('team-join', (data) => {
             teamService.join({id: socket.id, matchId: socket.matchId}, data, update);
         });
