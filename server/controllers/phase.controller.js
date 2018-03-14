@@ -93,7 +93,7 @@ const bothTeamsReady = (phase) => {
 }
 
 const hasThreeSelectedPlayers = (team) => {
-    return teamController.hasThreeSelectedPlayers()
+    return teamController.hasThreeSelectedPlayers(team)
 }
 
 const isSameFaction = (team) => {

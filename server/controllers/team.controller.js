@@ -61,7 +61,7 @@ const hasThreeOrMorePlayers = (team) => {
 
 // TODO: Eventually have a 'lock player' functionality that counts this better.
 const hasThreeSelectedPlayers = (team) => {
-    return _.size(_.map(team.players, 'characterName')) === 3;
+    return _.size(_.map(team.players, 'classSpec')) === 3;
 }
 
 const isSameFaction = (team) => {

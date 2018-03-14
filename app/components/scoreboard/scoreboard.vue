@@ -12,6 +12,9 @@
         <div v-if='phase.type === "blind-pick"'>
             Blind Pick
         </div>
+        <div v-if='phase.type === "round-one"'>
+            Round One, Fight!
+        </div>
     </div>
 </template>
 

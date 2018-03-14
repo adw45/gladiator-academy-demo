@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default {
     props: {
         team: {
@@ -8,7 +10,7 @@ export default {
     methods: {
         joinTeam() {
             this.$socket.emit('team-join', {
-                team: this.team 
+                team: this.team
             });
         },
         leaveTeam() {
@@ -48,6 +50,17 @@ export default {
         },
         isFull() {
             return this.$store.state.team[this.team].players.length >= 4;
+        },
+        isCompSelect() {
+            return _.includes(['blind-pick'], this.$store.state.phase.type);
+        },
+        isCompValid() {
+            let comp = _.pullAll(_.map(this.$store.state.team[this.team].players, function(player) {
+                return player.classSpec;
+            }), [undefined]);
+
+
+            return _.size(comp) === 3;
         }
     }
 };
