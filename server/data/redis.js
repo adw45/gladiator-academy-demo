@@ -36,20 +36,13 @@ const getMatch = (request) => {
         });
     };
 
-
-const retry_strategy = (options) => {
-    if (options.error.code === 'ECONNREFUSED') {
-        return;
-    }
-}
-
 module.exports = (redis) => {
     if (process.env.NODE_ENV === 'production'){
-        client = redis.createClient('12387', 'redis-12387.c11.us-east-1-2.ec2.cloud.redislabs.com', {retry_strategy});
-        client.auth('jXniWNrk4sQ2DGo8', (err) => { if (err) throw err; });
+        client = redis.createClient('10794', 'redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com');
+        client.auth('hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl', (err) => { if (err) throw err; });
     }
     else {
-        client = redis.createClient({retry_strategy});
+        client = redis.createClient();
     }
 
     return {
