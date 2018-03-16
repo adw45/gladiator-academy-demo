@@ -1,5 +1,9 @@
-var start = require('./components/start/start.vue'),
-    match = require('./components/match/match.vue');
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import start from './components/start/start.vue';
+import match from'./components/match/match.vue';
+
+Vue.use(VueRouter);
 
 Vue.component('start', start);
 Vue.component('match', match);

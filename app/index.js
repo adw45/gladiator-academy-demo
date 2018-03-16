@@ -1,11 +1,12 @@
-import VueSocketio from './js/vendor/vue-socket.min.js';
+import Vue from 'vue';
+import VueSocketio from 'vue-socket.io';
 import store from './store.js';
 import router from './router.js';
 
 Vue.use(VueSocketio, window.location.host, store);
 
 var app = new Vue({
-    router, 
+    router,
     store,
     el: '#app',
     sockets: {

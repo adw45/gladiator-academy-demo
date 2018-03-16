@@ -187,8 +187,8 @@ describe('team-controller', () => {
     it('hasThreeSelectedPlayers - has 2 players', () => {
         const team =  {
             players: [
-                {characterName: 'player1'},
-                {characterName: 'player2'}
+                {characterName: 'player1', classSpec: 'classSpec1'},
+                {characterName: 'player2', classSpec: 'classSpec2'}
             ]
         }
 
@@ -200,9 +200,9 @@ describe('team-controller', () => {
     it('hasThreeSelectedPlayers - has 3 players', () => {
         const team =  {
             players: [
-                {characterName: 'player1'},
-                {characterName: 'player2'},
-                {characterName: 'player3'}
+                {characterName: 'player1', classSpec: 'classSpec1'},
+                {characterName: 'player2', classSpec: 'classSpec2'},
+                {characterName: 'player3', classSpec: 'classSpec3'}
             ]
         }
 
@@ -214,10 +214,10 @@ describe('team-controller', () => {
     it('hasThreeSelectedPlayers - has 4 players', () => {
         const team =  {
             players: [
-                {characterName: 'player1'},
-                {characterName: 'player2'},
-                {characterName: 'player3'},
-                {characterName: 'player4'}
+                {characterName: 'player1', classSpec: 'classSpec1'},
+                {characterName: 'player2', classSpec: 'classSpec2'},
+                {characterName: 'player3', classSpec: 'classSpec3'},
+                {characterName: 'player4', classSpec: 'classSpec4'}
             ]
         }
 

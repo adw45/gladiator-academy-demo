@@ -15,9 +15,13 @@ const socketio = (server, services) => {
         socket.emit('connected', { id: socket.id })
 
         socket.on('disconnect', () => {
-            matchService.leave({id: socket.id, matchId: socket.matchId}, update);
+            if (socket.matchId) {
+                matchService.leave({id: socket.id, matchId: socket.matchId}, update);
+            }
+
             socket.leave(socket.matchId);
-            if (!io.sockets.adapter.rooms[socket.matchId]) {
+
+            if (socket.matchId && !io.sockets.adapter.rooms[socket.matchId]) {
                 matchService.destroy({matchId: socket.matchId});
             }
         });

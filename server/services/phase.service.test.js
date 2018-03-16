@@ -232,10 +232,8 @@ const mapPickOneExpected = () => {
 
     expected.data.phase = {
         type: 'map-pick-one',
-        ready: {
-            red: false,
-            blue: false
-        }
+        winningTeam: 'red',
+        losingTeam: 'blue'
     }
 
     return expected;

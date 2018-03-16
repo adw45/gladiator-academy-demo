@@ -2,3 +2,4 @@
 *.log
 dump.rdb
 /app/dist
+notes.md

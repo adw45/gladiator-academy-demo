@@ -1,7 +1,11 @@
+import Vue from 'vue';
+import Vuex from 'vuex';
 import team from './components/team/team.store';
 import playerSelect from './components/player/player.store';
 import scoreboard from './components/scoreboard/scoreboard.store';
 import mapSelect from './components/map-select/map-select.store';
+
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
