@@ -1,0 +1,12 @@
+{
+    "bnet": {
+        "callbackUrl": "https://localhost:3000/auth/bnet/callback",
+        "id": "tc4exhjxu7jhjbnk94a8mhkkqqjghsku",
+        "secret": "6nSHjsuekQyswUBkrKXVz7ESCgCRTwGq"
+    },
+    "redis": {
+        "url": "redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com",
+        "port": "10794",
+        "key": "hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl"
+    }
+}

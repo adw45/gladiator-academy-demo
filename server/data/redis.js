@@ -1,4 +1,6 @@
-const _ = require('lodash');
+const _ = require('lodash'),
+    config = require('../config');
+
 let client;
 
 const getMatch = (request) => {
@@ -35,13 +37,8 @@ deleteMatch = (data) => {
 };
 
 module.exports = (redis) => {
-    if (process.env.NODE_ENV === 'production'){
-        client = redis.createClient('10794', 'redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com');
-        client.auth('hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl', (err) => { if (err) throw err; });
-    }
-    else {
-        client = redis.createClient();
-    }
+    client = redis.createClient(config.redis.port, config.redis.url);
+    client.auth(config.redis.key, (err) => { if (err) throw err; });
 
     client.on("error", function (err) {
         console.log("Error " + err);

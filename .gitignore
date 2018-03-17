@@ -3,3 +3,4 @@
 dump.rdb
 /app/dist
 notes.md
+*.pem
