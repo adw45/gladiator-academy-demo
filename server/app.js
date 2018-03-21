@@ -2,19 +2,21 @@ let redisService = require('redis'),
     passport = require('passport'),
     session = require('express-session'),
     cookieParser = require('cookie-parser'),
+    express = require('express'),
+    fs = require('fs'),
+    path = require('path'),
+    mongoose = require('mongoose'),
     redis = require('./data/redis')(redisService),
     matchService = require('./services/match.service')(redis),
     playerService = require('./services/player.service')(redis),
     teamService = require('./services/team.service')(redis),
     phaseService = require('./services/phase.service')(redis),
     services = { matchService, playerService, teamService, phaseService },
-    express = require('express'),
+    config = require('./config'),
     io = require('./socket'),
-    routes = require('./router'),
-    auth = require('./auth'),
-    fs = require('fs'),
-    path = require('path'),
+    routes = require('./routes'),
     app = express(),
+    bodyParser = require('body-parser'),
     server;
 
 if (process.env.NODE_ENV !== 'production') {
@@ -32,6 +34,11 @@ else {
 
 io(server, services);
 
+mongoose.connect(config.mongo.url);
+mongoose.connection.on('error', function(err) {
+    console.log('Error: Could not connect to MongoDB.');
+});
+
 app.use(cookieParser());
 app.use(session({
     secret: 'blizzard',
@@ -42,9 +49,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(express.static('./app'));
-app.use('/_api', routes);
-app.use('/', auth);
+app.use('/', routes);
 
 app.use('/scripts', express.static(__dirname + '/node_modules/vue*/dist/'));
 app.use('/scripts', express.static(__dirname + '/node_modules/axios/dist/'));

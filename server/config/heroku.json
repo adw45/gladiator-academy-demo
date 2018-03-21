@@ -1,6 +1,6 @@
 {
     "bnet": {
-        "callbackUrl": "https://gladiator-academy.herokuapp.com/auth/bnet/callback",
+        "callbackUrl": "https://gladiator-academy.herokuapp.com/bnet/auth/authenticate/callback",
         "id": "k5e8t5h54k7v5z7v5k9b794sx8dax3s9",
         "secret": "eqkQSE8gbyVYjDetCyagRSu4ptMKdGBu"
     },
@@ -8,5 +8,9 @@
         "url": "redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com",
         "port": "10794",
         "key": "hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl"
-    }
+    },
+    "mongo": {
+        "url": "mongodb://gladiator-academy:password@ds117509.mlab.com:17509/heroku_r08j32kk"
+    },
+    "secret": "horseman-return-service-nacre"
 }

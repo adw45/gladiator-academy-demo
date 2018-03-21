@@ -1,6 +1,6 @@
 {
     "bnet": {
-        "callbackUrl": "https://localhost:3000/auth/bnet/callback",
+        "callbackUrl": "https://localhost:3000/bnet/auth/authenticate/callback",
         "id": "tc4exhjxu7jhjbnk94a8mhkkqqjghsku",
         "secret": "6nSHjsuekQyswUBkrKXVz7ESCgCRTwGq"
     },
@@ -8,5 +8,9 @@
         "url": "redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com",
         "port": "10794",
         "key": "hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl"
-    }
+    },
+    "mongo": {
+        "url": "mongodb://gladiator-academy:password@ds117509.mlab.com:17509/heroku_r08j32kk"
+    },
+    "secret": "poison-choke-talmud-intend"
 }
