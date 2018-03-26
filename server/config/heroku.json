@@ -1,6 +1,7 @@
 {
     "bnet": {
         "callbackUrl": "https://gladiator-academy.herokuapp.com/bnet/auth/authenticate/callback",
+        "authRedirectUrl": "/#/profile",
         "id": "k5e8t5h54k7v5z7v5k9b794sx8dax3s9",
         "secret": "eqkQSE8gbyVYjDetCyagRSu4ptMKdGBu"
     },

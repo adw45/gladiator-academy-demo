@@ -1,12 +1,14 @@
 let mongoose = require('mongoose'),
     bcrypt = require('bcrypt'),
+    characterSchema = require('./character'),
     Schema = mongoose.Schema;
 
 let UserSchema = new Schema({
-    accountName: {type: String, required: 'Account Name invalid'},
+    accountName: {type: String, unique: true, required: 'Account Name invalid'},
     email: {type: String, unique:true, lowercase: true, required: 'Email invalid'},
     blizzardId: {type: String, required: 'BlizzardId invalid'},
-    password: {type: String, required: 'Password Invalid', select: false}
+    password: {type: String, required: 'Password Invalid', select: false},
+    characters: [characterSchema]
 });
 
 UserSchema.pre('save', function(next) {

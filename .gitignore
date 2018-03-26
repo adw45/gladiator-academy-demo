@@ -4,5 +4,3 @@ dump.rdb
 /app/dist
 notes.md
 *.pem
-package-lock.json
-

@@ -25,23 +25,8 @@ export default {
         signup: function() {
             this.$router.push({name: 'signup'});
         },
-        checkAuthentication: async function() {
-            let response = await axios.get('/bnet/auth/isAutheticated');
-            console.log(response);
-        },
-        secret: async function() {
-            try {
-                let response = await axios.get('/secret', {
-                    headers: {
-                        Authorization: 'JWT ' + this.$cookie.get('ga-jwt')
-                    }
-                });
-                console.log(response);
-            }
-            catch(err) {
-                console.log('not logged in');
-            }
-
+        profile: function() {
+            this.$router.push({name: 'profile'});
         }
     }
 }

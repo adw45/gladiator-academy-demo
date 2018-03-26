@@ -1,6 +1,7 @@
 {
     "bnet": {
         "callbackUrl": "https://localhost:3000/bnet/auth/authenticate/callback",
+        "authRedirectUrl": "/#/profile",
         "id": "tc4exhjxu7jhjbnk94a8mhkkqqjghsku",
         "secret": "6nSHjsuekQyswUBkrKXVz7ESCgCRTwGq"
     },
