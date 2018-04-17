@@ -10,7 +10,6 @@ const join = async (redis, request, update) => {
     }
 
     result = await redis.updateMatch(request, (match) => matchController.joinExistingMatch(_.cloneDeep(match)));
-
     return update(request.matchId, result);
 };
 

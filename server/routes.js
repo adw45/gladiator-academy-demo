@@ -2,6 +2,7 @@ let express = require('express'),
     blizzAuth = require('./routes/blizzard-auth'),
     playerRouter = require('./routes/player'),
     userRouter = require('./routes/users'),
+    // openGameRouter = require('./routes/open-games'),
     router = express.Router(),
     passport = require('passport'),
     passportJwt = require('passport-jwt'),
@@ -67,6 +68,8 @@ router.get('/profile', passport.authenticate('jwt'), userRouter.getProfile);
 router.get('/secret', passport.authenticate('jwt'), (req, res) => {
     res.send('success! youre authenticated');
 });
+
+// router.get('/matches', openGameRouter.getMatches);
 
 router.use('/player', playerRouter);
 router.get('/', (req, res) => {

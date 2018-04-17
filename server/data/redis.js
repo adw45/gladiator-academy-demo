@@ -1,43 +1,45 @@
 const _ = require('lodash'),
-    config = require('../config');
+    config = require('../config'),
+    asyncRedis = require('async-redis');
 
 let client;
 
-const getMatch = (request) => {
-    return new Promise((resolve, reject) => {
-        client.get(request.matchId, (err, match) => {
-            return resolve(JSON.parse(match));
-        });
-    })
+const getKeyById = async (id) => {
+    return _.get(await client.keys(`*"id":"${id}"*`), 0);
+};
+
+const getMatch = async (request) => {
+    let key = await getKeyById(request.matchId)
+    if (!key) {
+        return undefined;
+    }
+    return JSON.parse(await client.get(key));;
 },
-createMatch = (request, data) => {
-    return new Promise(async (resolve, reject) => {
-        client.set(request.matchId, JSON.stringify(data));
-        resolve(await getMatch(request));
-    });
+createMatch = async (request, data) => {
+    await client.set(
+        JSON.stringify({id: request.matchId, phase: data.phase.type}),
+        JSON.stringify(data)
+    );
+    return await getMatch(request);
 },
-updateMatch = (request, transform) => {
-    return new Promise((resolve, reject) => {
-        client.get(request.matchId, (err, match) => {
-            if (err) {
-                reject(new Error(err));
-            }
-            match = transform(JSON.parse(match));
-            client.set(request.matchId, JSON.stringify(match));
-            resolve(match);
-        });
-    });
+updateMatch = async (request, transform) => {
+    let match = transform(await getMatch(request));
+
+    await client.DEL(await getKeyById(request.matchId));
+    await client.set(
+        JSON.stringify({id: request.matchId, phase: match.phase.type}),
+        JSON.stringify(match)
+    );
+
+    return await getMatch(request);
 },
-deleteMatch = (data) => {
-    return new Promise((resolve, reject) => {
-        client.DEL(data.matchId, (err) => {
-            resolve();
-        });
-    });
+deleteMatch = async (request) => {
+    await client.DEL(await getKeyById(request.matchId))
 };
 
 module.exports = (redis) => {
     client = redis.createClient(config.redis.port, config.redis.url);
+    client = asyncRedis.decorate(client);
     client.auth(config.redis.key, (err) => { if (err) throw err; });
 
     client.on("error", function (err) {

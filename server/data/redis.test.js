@@ -3,8 +3,8 @@ const redisMock = require('redis-mock'),
     redis = require('../data/redis')(redisMock);
 
 describe('redis', () => {
-    beforeEach(() => {
-        redis.createMatch({matchId: '123'}, matchController.createMatch('123'));
+    beforeEach(async () => {
+        await redis.createMatch({matchId: '123'}, matchController.createMatch('123'));
     });
 
     afterEach(() => {
