@@ -18,12 +18,7 @@ const socketio = (server, services) => {
             if (socket.matchId) {
                 matchService.leave({id: socket.id, matchId: socket.matchId}, update);
             }
-
             socket.leave(socket.matchId);
-
-            if (socket.matchId && !io.sockets.adapter.rooms[socket.matchId]) {
-                matchService.destroy({matchId: socket.matchId});
-            }
         });
 
         socket.on('join-room', (data) => {

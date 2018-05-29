@@ -8,7 +8,7 @@ const createMatch = (id) => {
         id,
         type: 'standard',
         size: 0,
-        bestOf: 3,
+        bestOf: 1,
         redScore: 0,
         blueScore: 0,
         teams: teamController.createTeam(),

@@ -69,26 +69,28 @@ const next = (phase, data) => {
     }
     if (phase.type === 'round-one') {
         return {
-            type: 'map-pick-one',
+            type: 'game-over',
             winningTeam: data.winningTeam,
             losingTeam: data.losingTeam
         }
     }
-    if (phase.type === 'map-pick-one') {
-        return {
-            type: 'winner-pick-one',
 
-        }
-    }
-    if (phase.type === 'winner-pick-one') {
-        return {
-            type: 'loser-pick-one',
-            ready: {
-                red: false,
-                blue: false
-            }
-        }
-    }
+    // if (phase.type === 'map-pick-one') {
+    //     return {
+    //         type: 'winner-pick-one',
+
+    //     }
+    // }
+    // if (phase.type === 'winner-pick-one') {
+    //     return {
+    //         type: 'loser-pick-one',
+    //         ready: {
+    //             red: false,
+    //             blue: false
+    //         }
+    //     }
+    // }
+
     return phase;
 }
 

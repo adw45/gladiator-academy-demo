@@ -15,6 +15,11 @@ const join = async (redis, request, update) => {
 
 const leave = async (redis, request, update) => {
     let match = await redis.updateMatch(request, (match) => matchController.leaveMatch(_.cloneDeep(match), request.id));
+
+    if (match.size === 0) {
+        return destroy(redis, request);
+    }
+
     return update(request.matchId, match);
 };
 

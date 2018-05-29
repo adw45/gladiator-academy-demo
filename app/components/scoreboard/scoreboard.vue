@@ -17,9 +17,12 @@
         <div v-if='phase.type === "round-one"'>
             Round One, Fight!
         </div>
-        <div v-if='phase.type === "map-pick-one"'>
-            {{winningTeam}} Team Wins! {{losingTeam}} Team's Map Pick
+        <div v-if='phase.type === "game-over"'>
+            {{winningTeam}} Team Wins!
         </div>
+        <!--div v-if='phase.type === "map-pick-one"'>
+            {{winningTeam}} Team Wins! {{losingTeam}} Team's Map Pick
+        </div-->
     </div>
 </template>
 

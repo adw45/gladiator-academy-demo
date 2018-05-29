@@ -2,13 +2,13 @@
     "bnet": {
         "callbackUrl": "https://localhost:3000/bnet/auth/authenticate/callback",
         "authRedirectUrl": "/#/profile",
-        "id": "tc4exhjxu7jhjbnk94a8mhkkqqjghsku",
-        "secret": "6nSHjsuekQyswUBkrKXVz7ESCgCRTwGq"
+        "id": "",
+        "secret": ""
     },
     "redis": {
         "url": "redis-10794.c15.us-east-1-2.ec2.cloud.redislabs.com",
         "port": "10794",
-        "key": "hsBLMjnoNNRMi8peLcXMMjOEwh7HlBjl"
+        "key": ""
     },
     "mongo": {
         "url": "mongodb://gladiator-academy:password@ds117509.mlab.com:17509/heroku_r08j32kk"
